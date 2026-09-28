@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI PM Toolkit — 5 Governance Templates</title>
+<style>
+  :root{
+    --navy:#0b2540; --navy2:#12385c; --ink:#1e293b; --muted:#64748b;
+    --line:#e2e8f0; --bg:#eef1f6; --card:#ffffff;
+    --teal:#0d9488; --teal-bg:#ccfbf1;
+    --blue:#1d4ed8; --blue-bg:#dbeafe;
+    --purple:#6d28d9; --purple-bg:#ede9fe;
+    --amber:#b45309; --amber-bg:#fef3c7;
+    --orange:#c2410c; --orange-bg:#ffedd5;
+    --red:#be123c; --red-bg:#ffe4e6;
+    --green:#15803d; --green-bg:#dcfce7;
+    --gray:#475569; --gray-bg:#f1f5f9;
+    --fill:#f8fafc;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:20px 12px;background:var(--bg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);line-height:1.45;-webkit-font-smoothing:antialiased;
+  }
+  .toolkit{max-width:1140px;margin:0 auto;}
+
+  /* ============ MASTHEAD ============ */
+  .masthead{
+    background:linear-gradient(135deg,var(--navy),var(--navy2));
+    border-radius:13px 13px 0 0;color:#fff;padding:22px 28px 18px;
+  }
+  .masthead .eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:#7dd3fc;font-weight:800;margin:0 0 4px;}
+  .masthead h1{margin:0;font-size:23px;letter-spacing:-.02em;line-height:1.2;}
+  .masthead p{margin:7px 0 0;font-size:13px;color:#cbd5e1;max-width:82ch;}
+  .mtags{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;}
+  .mtag{font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:999px;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);color:#e2e8f0;}
+
+  /* ============ TABS ============ */
+  .tabs{
+    display:flex;flex-wrap:wrap;gap:1px;background:var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .tab{
+    flex:1 1 150px;background:#f1f5f9;border:none;cursor:pointer;
+    padding:13px 12px;font-family:inherit;font-size:11.5px;font-weight:800;
+    color:var(--muted);text-align:left;transition:.15s;position:relative;
+  }
+  .tab .tn{display:block;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+    opacity:.7;margin-bottom:3px;font-weight:800;}
+  .tab:hover{background:#e8eef5;color:var(--ink);}
+  .tab.active{background:var(--card);color:var(--navy);}
+  .tab.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--teal);}
+  @media(max-width:800px){.tab{flex:1 1 100%;padding:10px 14px;}}
+
+  /* ============ PANELS ============ */
+  .panel{display:none;background:var(--card);border-radius:0 0 13px 13px;
+    box-shadow:0 10px 30px rgba(11,37,64,.10);overflow:hidden;}
+  .panel.active{display:block;}
+
+  /* ============ TEMPLATE SHELL ============ */
+  .tpl-head{
+    padding:16px 26px 14px;border-bottom:2px solid var(--line);
+    display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;
+  }
+  .tpl-head .badge-num{
+    flex:0 0 38px;height:38px;border-radius:10px;background:var(--navy);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;
+  }
+  .tpl-head h2{margin:0;font-size:18px;color:var(--navy);letter-spacing:-.01em;}
+  .tpl-head .desc{margin:3px 0 0;font-size:12px;color:var(--muted);max-width:70ch;}
+  .tpl-head .meta{margin-left:auto;font-size:10px;color:var(--muted);text-align:right;
+    font-weight:700;line-height:1.6;}
+
+  .body{padding:20px 26px 24px;}
+  .sect{margin-bottom:20px;}
+  .sect:last-child{margin-bottom:0;}
+  .sect-h{display:flex;align-items:center;gap:9px;margin:0 0 10px;}
+  .sect-h .n{flex:0 0 22px;height:22px;border-radius:6px;background:var(--gray-bg);
+    color:var(--navy);display:flex;align-items:center;justify-content:center;
+    font-size:10.5px;font-weight:900;border:1px solid var(--line);}
+  .sect-h h3{margin:0;font-size:12.5px;color:var(--navy);letter-spacing:-.005em;
+    text-transform:uppercase;letter-spacing:.06em;font-weight:800;font-size:11px;}
+  .sect-h .hint{margin-left:auto;font-size:10.5px;color:var(--muted);font-weight:600;}
+
+  /* ============ FORM ELEMENTS ============ */
+  .field-grid{display:grid;gap:10px;}
+  .g2{grid-template-columns:1fr 1fr;}
+  .g3{grid-template-columns:1fr 1fr 1fr;}
+  .g4{grid-template-columns:repeat(4,1fr);}
+  @media(max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr;}}
+
+  .f{display:flex;flex-direction:column;gap:3px;}
+  .f label{font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+  .f input[type=text], .f input[type=date], .f textarea, .f select{
+    font-family:inherit;font-size:12.5px;color:var(--ink);
+    border:none;border-bottom:1.5px dashed #cbd5e1;background:transparent;
+    padding:4px 2px;outline:none;transition:.15s;width:100%;
+  }
+  .f textarea{border:1.5px dashed #cbd5e1;border-radius:7px;padding:7px 9px;
+    resize:vertical;min-height:54px;line-height:1.45;}
+  .f input:focus, .f textarea:focus, .f select:focus{
+    border-color:var(--teal);background:#f0fdfa;border-radius:5px;
+  }
+  .f select{border-bottom:1.5px dashed #cbd5e1;cursor:pointer;}
+
+  .box{
+    border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--fill);
+  }
+  .box.accent-teal{border-left:4px solid var(--teal);background:#f0fdfa;}
+  .box.accent-red{border-left:4px solid var(--red);background:#fff1f2;}
+  .box.accent-amber{border-left:4px solid var(--amber);background:#fffbeb;}
+  .box.accent-blue{border-left:4px solid var(--blue);background:#eff6ff;}
+  .box .bt{font-size:9.5px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;
+    margin:0 0 7px;}
+  .box.accent-teal .bt{color:#0f766e;}
+  .box.accent-red .bt{color:#9f1239;}
+  .box.accent-amber .bt{color:#92400e;}
+  .box.accent-blue .bt{color:#1e3a8a;}
+
+  /* ============ TABLES ============ */
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;}
+  table{width:100%;border-collapse:collapse;font-size:11.5px;}
+  thead th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px;
+    font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;}
+  thead th:first-child{background:#081c33;}
+  tbody td{padding:0;border-top:1px solid var(--line);vertical-align:middle;}
+  tbody tr:nth-child(even) td{background:#fcfdff;}
+  tbody td input[type=text], tbody td select{
+    width:100%;border:none;background:transparent;font-family:inherit;
+    font-size:11.5px;color:var(--ink);padding:8px 10px;outline:none;
+  }
+  tbody td input:focus, tbody td select:focus{background:#f0fdfa;}
+  td.lead{font-weight:800;color:var(--navy);padding:8px 10px;font-size:11.5px;
+    background:#f8fafc;white-space:nowrap;}
+  td.center{text-align:center;padding:6px 4px;}
+  .col-tight{width:11%;}
+  .col-med{width:18%;}
+
+  /* ============ RACI CELL ============ */
+  .raci{
+    display:flex;gap:2px;justify-content:center;
+  }
+  .raci input{display:none;}
+  .raci label{
+    width:22px;height:22px;border-radius:6px;border:1.5px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    font-size:10px;font-weight:900;color:#cbd5e1;cursor:pointer;transition:.12s;
+    background:#fff;
+  }
+  .raci label:hover{border-color:#94a3b8;color:#64748b;}
+  .raci input:checked + label{background:var(--navy);border-color:var(--navy);color:#fff;}
+
+  /* ============ CHECKLIST ============ */
+  .cl{list-style:none;margin:0;padding:0;}
+  .cl li{
+    display:flex;align-items:flex-start;gap:9px;padding:7px 0;
+    border-bottom:1px dashed #f1f5f9;font-size:12px;color:#334155;
+  }
+  .cl li:last-child{border-bottom:none;}
+  .cl input[type=checkbox]{
+    appearance:none;-webkit-appearance:none;flex:0 0 16px;
+    width:16px;height:16px;border:1.5px solid #cbd5e1;border-radius:4px;
+    background:#fff;cursor:pointer;margin-top:1px;transition:.12s;position:relative;
+  }
+  .cl input[type=checkbox]:hover{border-color:var(--teal);}
+  .cl input[type=checkbox]:checked{background:var(--teal);border-color:var(--teal);}
+  .cl input[type=checkbox]:checked::after{
+    content:"";position:absolute;left:4.5px;top:1.5px;width:4px;height:8px;
+    border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
+  }
+  .cl .txt{flex:1;}
+  .cl .txt b{color:var(--navy);font-weight:800;}
+
+  /* ============ DOMAIN CARDS ============ */
+  .domains{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
+  .dom{border:1px solid var(--line);border-radius:11px;overflow:hidden;background:#fff;}
+  .dom-h{padding:9px 13px;color:#fff;font-size:11.5px;font-weight:800;
+    display:flex;align-items:center;gap:8px;}
+  .dom-h .ic{width:19px;height:19px;border-radius:6px;background:rgba(255,255,255,.24);
+    display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;}
+  .d1 .dom-h{background:linear-gradient(135deg,#5b21b6,#6d28d9);}
+  .d2 .dom-h{background:linear-gradient(135deg,#0f766e,#0d9488);}
+  .d3 .dom-h{background:linear-gradient(135deg,#1e40af,#1d4ed8);}
+  .d4 .dom-h{background:linear-gradient(135deg,#b45309,#d97706);}
+  .d5 .dom-h{background:linear-gradient(135deg,#9f1239,#be123c);}
+  .dom-b{padding:8px 13px 12px;}
+  .dom-b .cl li{font-size:11.5px;padding:5.5px 0;}
+  .dom-foot{padding:8px 13px;background:#f8fafc;border-top:1px solid var(--line);
+    display:flex;gap:8px;align-items:center;}
+  .dom-foot .fl{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+  .dom-foot input{flex:1;border:none;border-bottom:1.5px dashed #cbd5e1;background:transparent;
+    font-family:inherit;font-size:11px;padding:2px;outline:none;color:var(--ink);}
+
+  /* ============ ESCALATION CHAIN ============ */
+  .chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;}
+  .chain .cn{flex:1 1 130px;border:1.5px dashed #cbd5e1;border-radius:9px;padding:9px 11px;background:#f8fafc;}
+  .chain .cn .cl2{font-size:9px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);}
+  .chain .cn input{width:100%;border:none;background:transparent;font-family:inherit;
+    font-size:11.5px;font-weight:700;color:var(--navy);padding:3px 0;outline:none;}
+  .chain .cn input::placeholder{color:#cbd5e1;font-weight:600;}
+  .chain .ar{color:#94a3b8;font-weight:900;font-size:14px;}
+  .chain .cn.final{border-style:solid;border-color:var(--red);background:#fff1f2;}
+  .chain .cn.final input{color:#9f1239;}
+
+  /* ============ GATE CARDS ============ */
+  .gates3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;}
+  .gcard{border:1px solid var(--line);border-radius:11px;overflow:hidden;background:#fff;}
+  .gcard .gh{padding:9px 13px;color:#fff;font-size:11.5px;font-weight:800;}
+  .gc1 .gh{background:linear-gradient(135deg,#0f766e,#0d9488);}
+  .gc2 .gh{background:linear-gradient(135deg,#1e40af,#1d4ed8);}
+  .gc3 .gh{background:linear-gradient(135deg,#5b21b6,#6d28d9);}
+  .gcard .gb{padding:10px 13px 12px;}
+  .gcard .gb .mini{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 5px;}
+  .gcard .gb .mini:not(:first-child){margin-top:11px;}
+  .gcard .gb textarea{width:100%;border:1.5px dashed #cbd5e1;border-radius:7px;
+    font-family:inherit;font-size:11px;padding:6px 8px;outline:none;resize:vertical;
+    min-height:42px;color:var(--ink);line-height:1.4;background:#fff;}
+  .gcard .gb textarea:focus{border-color:var(--teal);background:#f0fdfa;}
+
+  /* ============ SEVERITY TABLE ============ */
+  .sev{display:grid;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .sev-row{display:grid;grid-template-columns:110px 1fr 130px 120px;
+    border-top:1px solid var(--line);align-items:center;}
+  .sev-row:first-child{border-top:none;background:var(--navy);color:#fff;}
+  .sev-row > div{padding:8px 11px;font-size:11.5px;}
+  .sev-row.head > div{font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;}
+  .sev-row .lvl{font-weight:900;font-size:11.5px;}
+  .sev-row.s1 .lvl{color:var(--amber);}
+  .sev-row.s2 .lvl{color:var(--orange);}
+  .sev-row.s3 .lvl{color:var(--red);}
+  .sev-row input{width:100%;border:none;border-bottom:1.5px dashed #cbd5e1;
+    background:transparent;font-family:inherit;font-size:11px;padding:3px 2px;outline:none;color:var(--ink);}
+  .sev-row input:focus{background:#f0fdfa;border-radius:4px;}
+  @media(max-width:760px){.sev-row{grid-template-columns:1fr;gap:2px;padding:6px 0;}
+    .sev-row > div{padding:4px 11px;}}
+
+  /* ============ SIGN-OFF STRIP ============ */
+  .signoffs{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;
+    border:1.5px solid var(--navy);border-radius:11px;padding:12px;background:#f8fafc;}
+  .so{display:flex;flex-direction:column;gap:4px;}
+  .so .sl{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+  .so input{font-family:inherit;font-size:11.5px;border:none;border-bottom:1.5px solid #94a3b8;
+    background:transparent;padding:4px 2px;outline:none;color:var(--navy);font-weight:700;}
+  .so input:focus{border-color:var(--teal);}
+  .so .role{font-size:10px;color:var(--teal);font-weight:700;}
+
+  /* ============ UTILITIES ============ */
+  .note{font-size:10.5px;color:var(--muted);font-style:italic;margin:8px 0 0;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .chip2{font-size:10px;font-weight:800;padding:4px 9px;border-radius:6px;
+    background:var(--gray-bg);border:1px solid var(--line);color:var(--gray);}
+  .chip2.t{background:var(--teal-bg);border-color:#5eead4;color:#115e59;}
+  .chip2.b{background:var(--blue-bg);border-color:#93c5fd;color:#1e3a8a;}
+  .chip2.p{background:var(--purple-bg);border-color:#c4b5fd;color:#5b21b6;}
+  .chip2.a{background:var(--amber-bg);border-color:#fcd34d;color:#92400e;}
+  .chip2.r{background:var(--red-bg);border-color:#fda4af;color:#9f1239;}
+
+  /* ============ TOOLBAR ============ */
+  .toolbar{
+    display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+    padding:12px 26px;background:#f8fafc;border-top:1px solid var(--line);
+  }
+  .toolbar .tl{font-size:10.5px;color:var(--muted);font-weight:600;}
+  .btn{
+    font-family:inherit;font-size:11.5px;font-weight:800;padding:8px 15px;
+    border-radius:8px;border:1.5px solid var(--line);background:#fff;color:var(--navy);
+    cursor:pointer;transition:.15s;
+  }
+  .btn:hover{border-color:var(--navy);background:#f1f5f9;}
+  .btn.primary{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .btn.primary:hover{background:var(--navy2);}
+  .toolbar .sp{margin-left:auto;}
+
+  /* ============ PRINT ============ */
+  @media print{
+    body{background:#fff;padding:0;font-size:10px;}
+    .toolkit{max-width:none;}
+    .masthead{border-radius:0;padding:14px 20px 12px;}
+    .tabs,.toolbar{display:none !important;}
+    .panel{display:none !important;box-shadow:none;border-radius:0;}
+    .panel.active{display:block !important;}
+    .body{padding:14px 20px 18px;}
+    .tpl-head{padding:12px 20px 10px;}
+    .dom,.gcard,.box,.sev{break-inside:avoid;}
+    .tw{overflow:visible;border:none;}
+    table{font-size:9px;}
+    thead th{font-size:7.5px;padding:5px 6px;}
+    input,textarea,select{border-color:#94a3b8 !important;}
+    input::placeholder,textarea::placeholder{color:transparent !important;}
+    @page{margin:12mm;}
+  }
+</style>
+</head>
+<body>
+<div class="toolkit">
+
+  <!-- ============ MASTHEAD ============ -->
+  <div class="masthead">
+    <p class="eyebrow">PM Toolkit · Responsible AI Delivery</p>
+    <h1>Five Templates for Governed AI Projects</h1>
+    <p>Fill-in-the-blank templates covering the full lifecycle — from chartering and responsible-AI review, through documentation and release, into live monitoring and incident response. Print the active template for a clean one-pager.</p>
+    <div class="mtags">
+      <span class="mtag">Template 1 · Governance Charter</span>
+      <span class="mtag">Template 2 · Responsible AI Checklist</span>
+      <span class="mtag">Template 3 · Documentation Bundle</span>
+      <span class="mtag">Template 4 · Model Release</span>
+      <span class="mtag">Template 5 · Monitoring &amp; Incident</span>
+    </div>
+  </div>
+
+  <!-- ============ TABS ============ -->
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="t1" role="tab"><span class="tn">Template 1</span>Governance Charter</button>
+    <button class="tab" data-tab="t2" role="tab"><span class="tn">Template 2</span>Responsible AI Checklist</button>
+    <button class="tab" data-tab="t3" role="tab"><span class="tn">Template 3</span>Documentation Bundle</button>
+    <button class="tab" data-tab="t4" role="tab"><span class="tn">Template 4</span>Model Release</button>
+    <button class="tab" data-tab="t5" role="tab"><span class="tn">Template 5</span>Monitoring &amp; Incident</button>
+  </nav>
+
+  <!-- ============================================================
+       TEMPLATE 1 — GOVERNANCE CHARTER
+  ============================================================ -->
+  <section class="panel active" id="t1" role="tabpanel">
+    <div class="tpl-head">
+      <div class="badge-num">1</div>
+      <div>
+        <h2>Governance Charter</h2>
+        <p class="desc">Defines who decides, who is accountable, how disagreements escalate, and what evidence clears each stage gate.</p>
+      </div>
+      <div class="meta">One page · Attach to kickoff<br>Owner: Sponsor</div>
+    </div>
+
+    <div class="body">
+
+      <!-- Identification -->
+      <div class="sect">
+        <div class="sect-h"><span class="n">A</span><h3>Project Identification</h3></div>
+        <div class="field-grid g3">
+          <div class="f"><label>Project / System Name</label><input type="text" placeholder="e.g. Sepsis Early Warning System"></div>
+          <div class="f"><label>Project ID</label><input type="text" placeholder="e.g. SEWS-2026-01"></div>
+          <div class="f"><label>Risk Tier</label>
+            <select><option>— Select —</option><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select>
+          </div>
+          <div class="f"><label>Version</label><input type="text" placeholder="1.0"></div>
+          <div class="f"><label>Effective Date</label><input type="date"></div>
+          <div class="f"><label>Next Review Date</label><input type="date"></div>
+        </div>
+      </div>
+
+      <!-- Use case & harm -->
+      <div class="sect">
+        <div class="sect-h"><span class="n">B</span><h3>Use Case, Decision Supported &amp; Harm If Wrong</h3></div>
+        <div class="field-grid g2" style="margin-bottom:10px;">
+          <div class="box accent-teal">
+            <p class="bt">Decision Supported</p>
+            <div class="f"><textarea placeholder="What decision does the model inform or automate? Who acts on it? What is the scope / limit?"></textarea></div>
+          </div>
+          <div class="box accent-red">
+            <p class="bt">Harm If Wrong</p>
+            <div class="f"><textarea placeholder="Who is harmed, how, and at what scale? Name the legal, financial, clinical, or reputational exposure."></textarea></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Roles & decision rights -->
+      <div class="sect">
+        <div class="sect-h"><span class="n">C</span><h3>Roles &amp; Decision Rights</h3><span class="hint">Name the team and the person</span></div>
+        <div class="tw">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:15%">Role</th>
+                <th style="width:22%">Team</th>
+                <th style="width:18%">Named Owner</th>
+                <th style="width:22%">Decides Alone</th>
+                <th style="width:23%">Must Escalate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="lead">Sponsor</td><td><input type="text" placeholder="e.g. Office of the CRO"></td><td><input type="text" placeholder="Name"></td><td><input type="text" placeholder="Budget, pilot start, release"></td><td><input type="text" placeholder="Gate holds, ethics veto"></td></tr>
+              <tr><td class="lead">Data Owner</td><td><input type="text" placeholder="e.g. Data Governance Council"></td><td><input type="text" placeholder="Name"></td><td><input type="text" placeholder="Data approval, consent scope"></td><td><input type="text" placeholder="New data sources, purpose change"></td></tr>
+              <tr><td class="lead">Model Owner</td><td><input type="text" placeholder="e.g. ML Engineering"></td><td><input type="text" placeholder="Name"></td><td><input type="text" placeholder="Architecture, retraining"></td><td><input type="text" placeholder="Threshold change, material update"></td></tr>
+              <tr><td class="lead">Ops Owner</td><td><input type="text" placeholder="e.g. IT Ops — Model Ops"></td><td><input type="text" placeholder="Name"></td><td><input type="text" placeholder="Deployment, rollback execution"></td><td><input type="text" placeholder="Tier 3 rollback, incidents"></td></tr>
+              <tr><td class="lead">Ethics / Review Board</td><td><input type="text" placeholder="e.g. AI Ethics &amp; Fair Lending Board"></td><td><input type="text" placeholder="Chair"></td><td><input type="text" placeholder="Halt authority at any gate"></td><td><input type="text" placeholder="—"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RACI -->
+      <div class="sect">
+        <div class="sect-h"><span class="n">D</span><h3>RACI — Five Core Activities</h3><span class="hint">Tick one letter per cell: R · A · C · I</span></div>
+        <div class="tw">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:24%">Activity</th>
+                <th class="col-tight">Sponsor</th>
+                <th class="col-tight">Data Owner</th>
+                <th class="col-tight">Model Owner</th>
+                <th class="col-tight">Ops Owner</th>
+                <th class="col-tight">Ethics Board</th>
+              </tr>
+            </thead>
+            <tbody id="raciBody">
+              <!-- rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+        <p class="note">R = Responsible (does the work) · A = Accountable (owns the outcome) · C = Consulted · I = Informed</p>
+      </div>
+
+      <!-- Escalation -->
+      <div class="sect">
+        <div class="sect-h"><span class="n">E</span><h3>Escalation Path</h3><span class="hint">Left to right · final authority at right</span></div>
+        <div class="chain">
+          <div class="cn"><div class="cl2">Level 1</div><input type="text" placeholder="Ops Owner"></div>
+          <span class="ar">→</span>
+          <div class="cn"><div class="cl2">Level 2</div><input type="text" placeholder="Model Owner"></div>
+          <span class="ar">→</span>
+          <div class="cn"><div class="cl2">Level 3</div><input type="text" placeholder="Data Owner"></div>
+          <span class="ar">→</span>
+          <div class="cn"><div class="cl2">Level 4</div><input type="text" placeholder="Sponsor"></div>
+          <span class="ar">→</span>
+          <div class="cn final"><div class="cl2">Final Authority</div><input type="text" placeholder="Ethics Board"></div>
+        </div>
+      </div>
+
+      <!-- Stage gates -->
+      <div class="sect">
+        <div class="sect-h"><span class="n">F</span><h3>Stage Gates &amp; Required Evidence</h3></div>
+        <div class="gates3">
+          <div class="gcard gc1">
+            <div class="gh">Gate 1 · Data Readiness</div>
+            <div class="gb">
+              <p class="mini">Evidence Required</p>
+              <textarea placeholder="Documents that must exist before training begins…"></textarea>
+              <p class="mini">Sign-off Required</p>
+              <textarea placeholder="Who signs, and what certificate do they issue?"></textarea>
+              <p class="mini">Gate Holds If</p>
+              <textarea placeholder="Threshold breach or missing evidence that blocks progress…"></textarea>
+            </div>
+          </div>
+          <div class="gcard gc2">
+            <div class="gh">Gate 2 · Pilot Approval</div>
+            <div class="gb">
+              <p class="mini">Evidence Required</p>
+              <textarea placeholder="Model card, bias tests, pilot plan, explainability artifacts…"></textarea>
+              <p class="mini">Sign-off Required</p>
+              <textarea placeholder="Technical validity, pilot authorization, ethics non-objection…"></textarea>
+              <p class="mini">Gate Holds If</p>
+              <textarea placeholder="Incomplete bias testing or no defined rollback trigger…"></textarea>
+            </div>
+          </div>
+          <div class="gcard gc3">
+            <div class="gh">Gate 3 · Production Release</div>
+            <div class="gb">
+              <p class="mini">Evidence Required</p>
+              <textarea placeholder="Validation report, monitoring spec, incident playbook, deployment record…"></textarea>
+              <p class="mini">Sign-off Required</p>
+              <textarea placeholder="Ops readiness, business release, Fair-Lending / ethics certificate…"></textarea>
+              <p class="mini">Gate Holds If</p>
+              <textarea placeholder="Monitoring not live, or ethics certificate withheld…"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sign-off -->
+      <div class="sect">
+        <div class="sect-h"><span class="n">G</span><h3>Charter Approval</h3></div>
+        <div class="signoffs">
+          <div class="so"><span class="sl">Sponsor</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Data Owner</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Model Owner</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Ops Owner</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Ethics Board Chair</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TEMPLATE 2 — RESPONSIBLE AI CHECKLIST
+  ============================================================ -->
+  <section class="panel" id="t2" role="tabpanel">
+    <div class="tpl-head">
+      <div class="badge-num">2</div>
+      <div>
+        <h2>Responsible AI Checklist</h2>
+        <p class="desc">Five review domains — fairness, privacy, explainability, safety, accountability. Each item needs an owner and a piece of evidence, not just a tick.</p>
+      </div>
+      <div class="meta">One page · Pre-release gate<br>Owner: Ethics Board</div>
+    </div>
+
+    <div class="body">
+
+      <!-- Identification -->
+      <div class="sect">
+        <div class="sect-h"><span class="n">A</span><h3>Review Identification</h3></div>
+        <div class="field-grid g4">
+          <div class="f"><label>System / Model</label><input type="text" placeholder="Name + version"></div>
+          <div class="f"><label>Review ID</label><input type="text" placeholder="RAI-YYYY-NNN"></div>
+          <div class="f"><label>Reviewer</label><input type="text" placeholder="Name / role"></div>
+          <div class="f"><label>Review Date</label><input type="date"></div>
+        </div>
+      </div>
+
+      <!-- Domains -->
+      <div class="sect">
+        <div class="sect-h"><span class="n">B</span><h3>Five Review Domains</h3><span class="hint">Tick · assign owner · cite evidence</span></div>
+        <div class="domains">
+
+          <div class="dom d1">
+            <div class="dom-h"><span class="ic">1</span>Fairness</div>
+            <div class="dom-b">
+              <ul class="cl">
+                <li><input type="checkbox"><span class="txt">Protected attributes identified and documented</span></li>
+                <li><input type="checkbox"><span class="txt">Disparate-impact testing completed on all subgroups</span></li>
+                <li><input type="checkbox"><span class="txt">All four-fifths ratios ≥ 0.80 (or justified exception)</span></li>
+                <li><input type="checkbox"><span class="txt">Proxy variables screened and excluded</span></li>
+                <li><input type="checkbox"><span class="txt">Mitigation applied where disparity found</span></li>
+              </ul>
+            </div>
+            <div class="dom-foot"><span class="fl">Owner</span><input type="text" placeholder="Name"><span class="fl">Evid.</span><input type="text" placeholder="Doc ID"></div>
+          </div>
+
+          <div class="dom d2">
+            <div class="dom-h"><span class="ic">2</span>Privacy</div>
+            <div class="dom-b">
+              <ul class="cl">
+                <li><input type="checkbox"><span class="txt">Lawful basis / consent established and documented</span></li>
+                <li><input type="checkbox"><span class="txt">Minimum-necessary data scope justified</span></li>
+                <li><input type="checkbox"><span class="txt">De-identification or pseudonymization applied</span></li>
+                <li><input type="checkbox"><span class="txt">Retention and deletion schedule defined</span></li>
+                <li><input type="checkbox"><span class="txt">Access controls and audit logging verified</span></li>
+              </ul>
+            </div>
+            <div class="dom-foot"><span class="fl">Owner</span><input type="text" placeholder="Name"><span class="fl">Evid.</span><input type="text" placeholder="Doc ID"></div>
+          </div>
+
+          <div class="dom d3">
+            <div class="dom-h"><span class="ic">3</span>Explainability</div>
+            <div class="dom-b">
+              <ul class="cl">
+                <li><input type="checkbox"><span class="txt">Intended use and non-uses stated plainly</span></li>
+                <li><input type="checkbox"><span class="txt">Top drivers available per decision</span></li>
+                <li><input type="checkbox"><span class="txt">Explanation method validated for stability</span></li>
+                <li><input type="checkbox"><span class="txt">Affected party can receive a plain-language reason</span></li>
+                <li><input type="checkbox"><span class="txt">Limitations documented in the model card</span></li>
+              </ul>
+            </div>
+            <div class="dom-foot"><span class="fl">Owner</span><input type="text" placeholder="Name"><span class="fl">Evid.</span><input type="text" placeholder="Doc ID"></div>
+          </div>
+
+          <div class="dom d4">
+            <div class="dom-h"><span class="ic">4</span>Safety</div>
+            <div class="dom-b">
+              <ul class="cl">
+                <li><input type="checkbox"><span class="txt">Failure modes enumerated and ranked</span></li>
+                <li><input type="checkbox"><span class="txt">Human-override path defined and reachable</span></li>
+                <li><input type="checkbox"><span class="txt">Rollback tested within recovery target</span></li>
+                <li><input type="checkbox"><span class="txt">Uncertainty threshold triggers fallback</span></li>
+                <li><input type="checkbox"><span class="txt">Incident playbook reviewed with ops</span></li>
+              </ul>
+            </div>
+            <div class="dom-foot"><span class="fl">Owner</span><input type="text" placeholder="Name"><span class="fl">Evid.</span><input type="text" placeholder="Doc ID"></div>
+          </div>
+
+          <div class="dom d5">
+            <div class="dom-h"><span class="ic">5</span>Accountability</div>
+            <div class="dom-b">
+              <ul class="cl">
+                <li><input type="checkbox"><span class="txt">Named owner for every lifecycle stage</span></li>
+                <li><input type="checkbox"><span class="txt">Decision rights and escalation path documented</span></li>
+                <li><input type="checkbox"><span class="txt">Monitoring owner assigned post-release</span></li>
+                <li><input type="checkbox"><span class="txt">Redress / appeal channel available to affected parties</span></li>
+                <li><input type="checkbox"><span class="txt">Audit trail complete and immutable</span></li>
+              </ul>
+            </div>
+            <div class="dom-foot"><span class="fl">Owner</span><input type="text" placeholder="Name"><span class="fl">Evid.</span><input type="text" placeholder="Doc ID"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Outcome -->
+      <div class="sect">
+        <div class="sect-h"><span class="n">C</span><h3>Review Outcome</h3></div>
+        <div class="field-grid g3" style="margin-bottom:10px;">
+          <div class="f"><label>Total Items Passed</label><input type="text" placeholder="e.g. 22 / 25"></div>
+          <div class="f"><label>Open Exceptions</label><input type="text" placeholder="Count"></div>
+          <div class="f"><label>Decision</label>
+            <select><option>— Select —</option><option>Approved</option><option>Approved with conditions</option><option>Deferred — evidence required</option><option>Rejected</option></select>
+          </div>
+        </div>
+        <div class="box accent-amber">
+          <p class="bt">Conditions &amp; Residual Risk</p>
+          <div class="f"><textarea placeholder="What must be remediated, by whom, by when? What risk remains accepted, and by whom?"></textarea></div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">D</span><h3>Review Sign-off</h3></div>
+        <div class="signoffs">
+          <div class="so"><span class="sl">Ethics Board Chair</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Model Owner</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Privacy Officer</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Sponsor</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TEMPLATE 3 — DOCUMENTATION BUNDLE
+  ============================================================ -->
+  <section class="panel" id="t3" role="tabpanel">
+    <div class="tpl-head">
+      <div class="badge-num">3</div>
+      <div>
+        <h2>Documentation Bundle Checklist</h2>
+        <p class="desc">Every artifact an auditor will ask for, across five categories — with owner, frequency, location, and status.</p>
+      </div>
+      <div class="meta">Multi-page · Living document<br>Owner: Quality / Compliance</div>
+    </div>
+
+    <div class="body">
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">A</span><h3>Bundle Identification</h3></div>
+        <div class="field-grid g4">
+          <div class="f"><label>System / Model</label><input type="text" placeholder="Name + version"></div>
+          <div class="f"><label>Bundle ID</label><input type="text" placeholder="ADB-YYYY-NNN"></div>
+          <div class="f"><label>Bundle Owner</label><input type="text" placeholder="Name / team"></div>
+          <div class="f"><label>Last Updated</label><input type="date"></div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">B</span><h3>Artifact Register</h3><span class="hint">Add rows as needed · Status: Complete / Draft / Missing / Expired</span></div>
+        <div class="tw">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:5%">#</th>
+                <th style="width:26%">Artifact</th>
+                <th style="width:16%">Owner</th>
+                <th style="width:15%">Update Frequency</th>
+                <th style="width:14%">Retention</th>
+                <th style="width:12%">Location / Link</th>
+                <th style="width:12%">Status</th>
+              </tr>
+            </thead>
+            <tbody id="docBody">
+              <!-- rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">C</span><h3>Completeness Summary</h3></div>
+        <div class="field-grid g4">
+          <div class="f"><label>Total Artifacts</label><input type="text" placeholder="Count"></div>
+          <div class="f"><label>Complete</label><input type="text" placeholder="Count"></div>
+          <div class="f"><label>Draft / Missing</label><input type="text" placeholder="Count"></div>
+          <div class="f"><label>Expired (needs renewal)</label><input type="text" placeholder="Count"></div>
+        </div>
+        <div class="box accent-blue" style="margin-top:12px;">
+          <p class="bt">Gaps &amp; Remediation</p>
+          <div class="f"><textarea placeholder="Which artifacts are missing or expired? Who owns the fix, and by when?"></textarea></div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">D</span><h3>Bundle Certification</h3></div>
+        <div class="signoffs">
+          <div class="so"><span class="sl">Bundle Owner</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Internal Audit</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Compliance Officer</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TEMPLATE 4 — MODEL RELEASE CHECKLIST
+  ============================================================ -->
+  <section class="panel" id="t4" role="tabpanel">
+    <div class="tpl-head">
+      <div class="badge-num">4</div>
+      <div>
+        <h2>Model Release Checklist</h2>
+        <p class="desc">Everything that must be true before a model version reaches production — sign-offs, evidence, and the rollback plan that makes the release reversible.</p>
+      </div>
+      <div class="meta">One page · Pre-release gate<br>Owner: Sponsor + Ops</div>
+    </div>
+
+    <div class="body">
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">A</span><h3>Release Identification</h3></div>
+        <div class="field-grid g4">
+          <div class="f"><label>Model Name</label><input type="text" placeholder="Name"></div>
+          <div class="f"><label>Version → Version</label><input type="text" placeholder="v1.2 → v2.0"></div>
+          <div class="f"><label>Release Type</label>
+            <select><option>— Select —</option><option>Major</option><option>Minor</option><option>Patch</option><option>Emergency hotfix</option></select>
+          </div>
+          <div class="f"><label>Target Release Date</label><input type="date"></div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">B</span><h3>Release Evidence</h3><span class="hint">No release without these attached</span></div>
+        <div class="domains">
+          <div class="dom d3" style="grid-column:span 1;">
+            <div class="dom-h"><span class="ic">✓</span>Technical Evidence</div>
+            <div class="dom-b">
+              <ul class="cl">
+                <li><input type="checkbox"><span class="txt">Final validation report attached</span></li>
+                <li><input type="checkbox"><span class="txt">Model card updated for this version</span></li>
+                <li><input type="checkbox"><span class="txt">Fairness / subgroup results attached</span></li>
+                <li><input type="checkbox"><span class="txt">Shadow-mode results reviewed</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="dom d2" style="grid-column:span 1;">
+            <div class="dom-h"><span class="ic">✓</span>Operational Evidence</div>
+            <div class="dom-b">
+              <ul class="cl">
+                <li><input type="checkbox"><span class="txt">Monitoring dashboard live and baseline-set</span></li>
+                <li><input type="checkbox"><span class="txt">Incident playbook updated</span></li>
+                <li><input type="checkbox"><span class="txt">Rollback tested in staging</span></li>
+                <li><input type="checkbox"><span class="txt">On-call and escalation contacts confirmed</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="dom d5" style="grid-column:span 1;">
+            <div class="dom-h"><span class="ic">✓</span>Governance Evidence</div>
+            <div class="dom-b">
+              <ul class="cl">
+                <li><input type="checkbox"><span class="txt">Ethics / Fair-Lending certificate issued</span></li>
+                <li><input type="checkbox"><span class="txt">Change log entry complete</span></li>
+                <li><input type="checkbox"><span class="txt">Documentation bundle updated</span></li>
+                <li><input type="checkbox"><span class="txt">Comms / training plan ready</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">C</span><h3>Release Sign-offs</h3><span class="hint">All required before deployment</span></div>
+        <div class="signoffs">
+          <div class="so"><span class="sl">Model Owner — Technical Validity</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Quality / Independent Validation</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Ops Owner — Operational Readiness</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Ethics Board — Certificate</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Sponsor — Release Authorization</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">D</span><h3>Rollback Plan</h3></div>
+        <div class="field-grid g2" style="margin-bottom:10px;">
+          <div class="f"><label>Prior Valid Version (Artifact ID / Hash)</label><input type="text" placeholder="v1.9 · sha256:…"></div>
+          <div class="f"><label>Recovery Time Target</label><input type="text" placeholder="e.g. < 30 minutes"></div>
+          <div class="f"><label>Rollback Trigger</label><input type="text" placeholder="What condition forces a revert?"></div>
+          <div class="f"><label>Rollback Authority</label><input type="text" placeholder="Who can call it, unilaterally?"></div>
+        </div>
+        <div class="box accent-red">
+          <p class="bt">Post-Rollback Actions</p>
+          <div class="f"><textarea placeholder="Incident review timeline, patient/customer notification, re-release conditions…"></textarea></div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">E</span><h3>Go / No-Go Decision</h3></div>
+        <div class="field-grid g3">
+          <div class="f"><label>Decision</label>
+            <select><option>— Select —</option><option>GO — Release approved</option><option>GO WITH CONDITIONS</option><option>NO-GO — Hold release</option></select>
+          </div>
+          <div class="f"><label>Decision Date</label><input type="date"></div>
+          <div class="f"><label>Decision Owner</label><input type="text" placeholder="Name"></div>
+        </div>
+        <div class="box accent-amber" style="margin-top:12px;">
+          <p class="bt">Conditions or Hold Reason</p>
+          <div class="f"><textarea placeholder="If conditional or held, state exactly what must change before release proceeds."></textarea></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TEMPLATE 5 — MONITORING & INCIDENT PLAN
+  ============================================================ -->
+  <section class="panel" id="t5" role="tabpanel">
+    <div class="tpl-head">
+      <div class="badge-num">5</div>
+      <div>
+        <h2>Monitoring &amp; Incident Plan</h2>
+        <p class="desc">What to watch, what triggers a response, who owns each signal, how fast they must act, and who gets told.</p>
+      </div>
+      <div class="meta">One page · Operate stage gate<br>Owner: Ops Owner</div>
+    </div>
+
+    <div class="body">
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">A</span><h3>Plan Identification</h3></div>
+        <div class="field-grid g4">
+          <div class="f"><label>System / Model</label><input type="text" placeholder="Name + version"></div>
+          <div class="f"><label>Plan ID</label><input type="text" placeholder="MCP-YYYY-NNN"></div>
+          <div class="f"><label>Plan Owner</label><input type="text" placeholder="Ops Owner name"></div>
+          <div class="f"><label>Next Review</label><input type="date"></div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">B</span><h3>Monitoring Metrics</h3><span class="hint">2 business · 2 model · 1 fairness minimum</span></div>
+        <div class="tw">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:6%">#</th>
+                <th style="width:22%">Metric</th>
+                <th style="width:14%">Type</th>
+                <th style="width:11%">Green</th>
+                <th style="width:11%">Yellow</th>
+                <th style="width:11%">Red</th>
+                <th style="width:13%">Owner</th>
+                <th style="width:12%">Frequency</th>
+              </tr>
+            </thead>
+            <tbody id="metricBody">
+              <!-- rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">C</span><h3>Drift Triggers &amp; Response</h3><span class="hint">Detect → Investigate → Collect → Retrain → Revalidate → Release</span></div>
+        <div class="tw">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:14%">Stage</th>
+                <th style="width:28%">Trigger / Entry Condition</th>
+                <th style="width:30%">Action</th>
+                <th style="width:14%">Owner</th>
+                <th style="width:14%">Timeframe / SLA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="lead">1 · Detect</td><td><input type="text" placeholder="Threshold breaches that open a ticket"></td><td><input type="text" placeholder="Automated alerting behaviour"></td><td><input type="text" placeholder="Owner"></td><td><input type="text" placeholder="Real-time"></td></tr>
+              <tr><td class="lead">2 · Investigate</td><td><input type="text" placeholder="Confirmed drift signal"></td><td><input type="text" placeholder="Root-cause analysis scope"></td><td><input type="text" placeholder="Owner"></td><td><input type="text" placeholder="SLA"></td></tr>
+              <tr><td class="lead">3 · Collect Data</td><td><input type="text" placeholder="Cause confirmed as model/data"></td><td><input type="text" placeholder="Cohort assembly + certification"></td><td><input type="text" placeholder="Owner"></td><td><input type="text" placeholder="SLA"></td></tr>
+              <tr><td class="lead">4 · Retrain</td><td><input type="text" placeholder="Certified cohort ready"></td><td><input type="text" placeholder="Candidate model build"></td><td><input type="text" placeholder="Owner"></td><td><input type="text" placeholder="SLA"></td></tr>
+              <tr><td class="lead">5 · Revalidate</td><td><input type="text" placeholder="Candidate ready for review"></td><td><input type="text" placeholder="Discrimination, calibration, equity"></td><td><input type="text" placeholder="Owner"></td><td><input type="text" placeholder="SLA"></td></tr>
+              <tr><td class="lead">6 · Release</td><td><input type="text" placeholder="Validation passed + certificate"></td><td><input type="text" placeholder="Deploy + baseline reset + comms"></td><td><input type="text" placeholder="Owner"></td><td><input type="text" placeholder="SLA"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">D</span><h3>Safe Fallback for High Uncertainty</h3></div>
+        <div class="field-grid g3">
+          <div class="box accent-amber">
+            <p class="bt">Tier 1 · Human Review</p>
+            <div class="f"><textarea placeholder="Trigger condition — when is a human required in the loop?"></textarea></div>
+            <div class="f" style="margin-top:8px;"><textarea placeholder="Required action and acknowledgement window"></textarea></div>
+          </div>
+          <div class="box" style="border-left:4px solid var(--orange);background:#fff7ed;">
+            <p class="bt" style="color:#9a3412;">Tier 2 · Pause Automation</p>
+            <div class="f"><textarea placeholder="Trigger condition — when does automation stop?"></textarea></div>
+            <div class="f" style="margin-top:8px;"><textarea placeholder="Degraded-mode behaviour and who is notified"></textarea></div>
+          </div>
+          <div class="box accent-red">
+            <p class="bt">Tier 3 · Rollback</p>
+            <div class="f"><textarea placeholder="Trigger condition — when do we revert?"></textarea></div>
+            <div class="f" style="margin-top:8px;"><textarea placeholder="Revert target, authority, and recovery time"></textarea></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">E</span><h3>Incident Severity &amp; SLA</h3></div>
+        <div class="sev">
+          <div class="sev-row head">
+            <div>Severity</div><div>Definition</div><div>Acknowledge / Resolve</div><div>Notify</div>
+          </div>
+          <div class="sev-row s1">
+            <div class="lvl">SEV-3</div>
+            <div><input type="text" placeholder="Minor degradation, no harm"></div>
+            <div><input type="text" placeholder="e.g. 24h / 5d"></div>
+            <div><input type="text" placeholder="Owner"></div>
+          </div>
+          <div class="sev-row s2">
+            <div class="lvl">SEV-2</div>
+            <div><input type="text" placeholder="Material degradation or control failure"></div>
+            <div><input type="text" placeholder="e.g. 4h / 24h"></div>
+            <div><input type="text" placeholder="Owner + Sponsor"></div>
+          </div>
+          <div class="sev-row s3">
+            <div class="lvl">SEV-1</div>
+            <div><input type="text" placeholder="Harm, regulatory exposure, or unsafe output"></div>
+            <div><input type="text" placeholder="e.g. 15m / immediate"></div>
+            <div><input type="text" placeholder="All + Ethics Board"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">F</span><h3>Communication Plan</h3></div>
+        <div class="tw">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:22%">Audience</th>
+                <th style="width:24%">What They Receive</th>
+                <th style="width:16%">Channel</th>
+                <th style="width:16%">Timing</th>
+                <th style="width:22%">Owner</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="lead">Incident Response</td><td><input type="text" placeholder="Alert detail + context"></td><td><input type="text" placeholder="Pager / bridge"></td><td><input type="text" placeholder="Immediate"></td><td><input type="text" placeholder="Ops Owner"></td></tr>
+              <tr><td class="lead">Executive / Sponsor</td><td><input type="text" placeholder="Impact summary + decision needed"></td><td><input type="text" placeholder="Email / call"></td><td><input type="text" placeholder="Within SLA"></td><td><input type="text" placeholder="Ops Owner"></td></tr>
+              <tr><td class="lead">Ethics Board</td><td><input type="text" placeholder="Safety + fairness implications"></td><td><input type="text" placeholder="Formal notice"></td><td><input type="text" placeholder="SEV-1 immediate"></td><td><input type="text" placeholder="Sponsor"></td></tr>
+              <tr><td class="lead">Front-line Users</td><td><input type="text" placeholder="Degraded-mode guidance"></td><td><input type="text" placeholder="In-tool banner / huddle"></td><td><input type="text" placeholder="Before change"></td><td><input type="text" placeholder="Ops Owner"></td></tr>
+              <tr><td class="lead">Affected Parties</td><td><input type="text" placeholder="Notice + redress pathway"></td><td><input type="text" placeholder="Per policy"></td><td><input type="text" placeholder="Per regulation"></td><td><input type="text" placeholder="Compliance"></td></tr>
+              <tr><td class="lead">Regulator</td><td><input type="text" placeholder="Reportable event notification"></td><td><input type="text" placeholder="Formal filing"></td><td><input type="text" placeholder="Statutory window"></td><td><input type="text" placeholder="Compliance"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">G</span><h3>On-Call &amp; Escalation Contacts</h3></div>
+        <div class="field-grid g4">
+          <div class="f"><label>Primary On-Call</label><input type="text" placeholder="Name / phone"></div>
+          <div class="f"><label>Secondary On-Call</label><input type="text" placeholder="Name / phone"></div>
+          <div class="f"><label>Model Owner</label><input type="text" placeholder="Name / phone"></div>
+          <div class="f"><label>Ethics Board Chair</label><input type="text" placeholder="Name / phone"></div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="n">H</span><h3>Plan Approval</h3></div>
+        <div class="signoffs">
+          <div class="so"><span class="sl">Ops Owner</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Model Owner</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Ethics Board Chair</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+          <div class="so"><span class="sl">Sponsor</span><input type="text" placeholder="Name"><span class="role">Signature / Date</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ TOOLBAR ============ -->
+  <div class="toolbar">
+    <span class="tl">Fill in the active template, then print it as a clean one-pager.</span>
+    <span class="sp"></span>
+    <button class="btn" onclick="clearActive()">Clear Fields</button>
+    <button class="btn primary" onclick="window.print()">⎙ Print Active Template</button>
+  </div>
+
+</div>
+
+<script>
+  /* ---------- TAB SWITCHING ---------- */
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }));
+
+  /* ---------- RACI MATRIX (Template 1) ---------- */
+  const activities = ['Data Approval','Pilot Start','Model Release','Monitoring','Model Update'];
+  const raciBody = document.getElementById('raciBody');
+  activities.forEach((act, ai) => {
+    const tr = document.createElement('tr');
+    let cells = `<td class="lead">${act}</td>`;
+    for (let r = 0; r < 5; r++) {
+      const g = `raci-${ai}-${r}`;
+      cells += `<td class="center"><div class="raci">
+        ${['R','A','C','I'].map(l =>
+          `<input type="radio" name="${g}" id="${g}-${l}" value="${l}">
+           <label for="${g}-${l}">${l}</label>`).join('')}
+      </div></td>`;
+    }
+    tr.innerHTML = cells;
+    raciBody.appendChild(tr);
+  });
+
+  /* ---------- DOCUMENTATION REGISTER (Template 3) ---------- */
+  const docRows = [
+    ['Data Use & Approval Certificate','Data Governance Council','Onboarding + annual','6 yrs',''],
+    ['IRB / Ethics determination memo','IRB Administrator','On protocol change','6 yrs',''],
+    ['Data quality SLO scorecard','Data Owner + HIM','Monthly','6 yrs',''],
+    ['Model card (intended use, limitations)','Model Owner','Every release','Life + 5 yrs',''],
+    ['Training data provenance record','Model Owner + Data Owner','Every release','Life + 5 yrs',''],
+    ['Validation report (independent)','Quality / Validation','Pre-deploy + annual','Life + 6 yrs',''],
+    ['Fairness / subgroup analysis','Ethics Board','Pre-deploy + annual','Life + 6 yrs',''],
+    ['Monitoring dashboard specification','Ops Owner','Annual review','Life + 6 yrs',''],
+    ['Rollback / override runbook','Ops Owner','Annual + post-incident','Life + 6 yrs',''],
+    ['Change log (version history)','Model Owner','Per change','Life + 6 yrs',''],
+    ['Incident playbook & severity matrix','Ops Owner + Quality','Annual','Life + 6 yrs',''],
+    ['Inference & human-action audit logs','Ops Owner','Continuous','6 yrs, immutable','']
+  ];
+  const docBody = document.getElementById('docBody');
+  docRows.forEach((row, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="lead" style="text-align:center">${i+1}</td>
+      <td><input type="text" value="${row[0]}" style="font-weight:700;color:var(--navy)"></td>
+      <td><input type="text" value="${row[1]}"></td>
+      <td><input type="text" value="${row[2]}"></td>
+      <td><input type="text" value="${row[3]}"></td>
+      <td><input type="text" placeholder="Link / path"></td>
+      <td><input type="text" placeholder="Complete / Draft"></td>`;
+    docBody.appendChild(tr);
+  });
+
+  /* ---------- METRIC ROWS (Template 5) ---------- */
+  const metrics = [
+    ['Business KPI 1',''],
+    ['Business KPI 2',''],
+    ['Model Metric 1',''],
+    ['Model Metric 2',''],
+    ['Fairness / Segment','']
+  ];
+  const metricBody = document.getElementById('metricBody');
+  metrics.forEach((m, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="lead" style="text-align:center">${i+1}</td>
+      <td><input type="text" placeholder="Metric name + definition"></td>
+      <td><input type="text" value="${m[0]}" style="font-weight:700;color:var(--teal)"></td>
+      <td><input type="text" placeholder="≤ / ≥"></td>
+      <td><input type="text" placeholder="Range"></td>
+      <td><input type="text" placeholder="Range"></td>
+      <td><input type="text" placeholder="Owner"></td>
+      <td><input type="text" placeholder="Daily / weekly"></td>`;
+    metricBody.appendChild(tr);
+  });
+
+  /* ---------- CLEAR ACTIVE PANEL ---------- */
+  function clearActive() {
+    const panel = document.querySelector('.panel.active');
+    if (!panel) return;
+    if (!confirm('Clear all filled-in fields in this template?')) return;
+    panel.querySelectorAll('input, textarea, select').forEach(el => {
+      if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+      else if (el.tagName === 'SELECT') el.selectedIndex = 0;
+      else if (!el.defaultValue) el.value = '';
+      else el.value = el.defaultValue;
+    });
+  }
+</script>
+</body>
+</html>
