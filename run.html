@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADKAR × Kotter — Diagnostic Worksheet | SEWS v2.3</title>
+<style>
+  :root{
+    --navy:#0b2540; --navy2:#12385c; --ink:#1e293b; --muted:#64748b;
+    --line:#e2e8f0; --bg:#eef1f6; --card:#fff; --fill:#f8fafc;
+    --a:#0f766e; --d:#0d9488; --k:#14b8a6; --ab:#0ea5a0; --r:#5eead4;
+    --k1:#4c1d95; --k2:#5b21b6; --k3:#6d28d9; --k4:#7c3aed; --k5:#a78bfa;
+    --teal:#0d9488; --teal-bg:#ccfbf1;
+    --blue:#1d4ed8; --blue-bg:#dbeafe;
+    --purple:#6d28d9; --purple-bg:#ede9fe;
+    --amber:#b45309; --amber-bg:#fef3c7;
+    --orange:#c2410c; --orange-bg:#ffedd5;
+    --red:#be123c; --red-bg:#ffe4e6;
+    --green:#15803d; --green-bg:#dcfce7;
+    --gray:#475569; --gray-bg:#f1f5f9;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:16px 10px;background:var(--bg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);line-height:1.38;-webkit-font-smoothing:antialiased;
+  }
+  .sheet{max-width:1240px;margin:0 auto;background:var(--card);border-radius:12px;
+    box-shadow:0 10px 30px rgba(11,37,64,.12);overflow:hidden;}
+
+  /* ---------- HEADER ---------- */
+  header{background:linear-gradient(120deg,#0b2540 0%,#1a1f4d 55%,#4c1d95 100%);
+    color:#fff;padding:13px 22px 11px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+  header .ttl{flex:1 1 auto;min-width:260px;}
+  .eyebrow{font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+    color:#7dd3fc;font-weight:800;margin:0 0 2px;}
+  header h1{margin:0;font-size:16.5px;letter-spacing:-.02em;line-height:1.2;}
+  header .q{margin:4px 0 0;font-size:10.8px;color:#ddd6fe;font-style:italic;max-width:80ch;}
+  .pos{flex:0 0 auto;text-align:right;font-size:8.5px;color:#c4b5fd;font-weight:700;line-height:1.55;}
+  .pos b{color:#fff;font-size:10px;display:block;}
+
+  /* ---------- SECTIONS ---------- */
+  .sec{padding:10px 22px 11px;border-bottom:1px solid var(--line);}
+  .sec:last-of-type{border-bottom:none;}
+  .sec-h{display:flex;align-items:center;gap:9px;margin:0 0 8px;}
+  .sec-h .n{flex:0 0 20px;height:20px;border-radius:6px;background:var(--navy);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;}
+  .sec-h h2{margin:0;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--navy);font-weight:800;}
+  .sec-h .hint{margin-left:auto;font-size:9.3px;color:var(--muted);font-weight:700;}
+  .lede{font-size:10px;color:#475569;margin:0 0 9px;line-height:1.45;}
+  .lede b{color:var(--navy);}
+
+  /* ---------- IDENTIFICATION STRIP ---------- */
+  .ident{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:11px;}
+  @media(max-width:760px){.ident{grid-template-columns:repeat(2,1fr);}}
+  .idf{display:flex;flex-direction:column;gap:2px;}
+  .idf label{font-size:7px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);}
+  .idf input{font-family:inherit;font-size:11px;font-weight:700;color:var(--navy);
+    border:none;border-bottom:1.5px dashed #cbd5e1;background:transparent;
+    padding:3px 2px;outline:none;width:100%;}
+  .idf input:focus{border-color:var(--teal);background:#f0fdfa;border-radius:4px;}
+  .idf input::placeholder{color:#cbd5e1;font-weight:600;font-size:10px;}
+
+  /* ---------- TOOLBAR ---------- */
+  .toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;
+    padding:7px 10px;background:#f8fafc;border:1px solid var(--line);border-radius:8px;
+    margin-bottom:9px;}
+  .toolbar .tl{font-size:9px;color:var(--muted);font-weight:700;margin-right:auto;}
+  .btn{font-family:inherit;font-size:9.8px;font-weight:800;padding:5px 11px;
+    border-radius:6px;border:1.5px solid var(--line);background:#fff;color:var(--navy);
+    cursor:pointer;transition:.15s;}
+  .btn:hover{border-color:var(--navy);background:#f1f5f9;}
+  .btn.primary{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .btn.primary:hover{background:var(--navy2);}
+  .btn.danger{border-color:#fda4af;color:#9f1239;}
+  .btn.danger:hover{background:#fff1f2;}
+
+  /* ---------- WORKSHEET TABLE ---------- */
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:9px;}
+  table.ws{width:100%;border-collapse:collapse;font-size:9.5px;min-width:1080px;
+    table-layout:fixed;}
+  table.ws thead th{background:var(--navy);color:#fff;text-align:left;padding:6px 7px;
+    font-size:7px;text-transform:uppercase;letter-spacing:.07em;font-weight:800;
+    vertical-align:bottom;line-height:1.25;}
+  table.ws thead th:first-child{background:#081c33;}
+  table.ws thead th .req{display:block;font-size:6px;color:#fda4af;
+    letter-spacing:.05em;font-weight:700;margin-top:2px;}
+  table.ws tbody tr{border-top:1px solid var(--line);}
+  table.ws tbody tr:nth-child(even){background:#fcfdff;}
+  table.ws tbody tr.row-filled{background:#fbfcfe;}
+  table.ws td{padding:0;vertical-align:top;}
+
+  /* Cell inputs */
+  table.ws input[type=text],
+  table.ws input[type=date],
+  table.ws select,
+  table.ws textarea{
+    width:100%;border:none;background:transparent;font-family:inherit;
+    font-size:9.5px;color:var(--ink);padding:8px 7px;outline:none;
+    line-height:1.35;resize:none;
+  }
+  table.ws textarea{min-height:34px;font-family:inherit;}
+  table.ws input:focus,
+  table.ws select:focus,
+  table.ws textarea:focus{background:#f0fdfa;box-shadow:inset 0 0 0 1.5px var(--teal);}
+  table.ws input::placeholder,
+  table.ws textarea::placeholder{color:#cbd5e1;font-weight:600;font-size:8.8px;}
+  table.ws select{cursor:pointer;font-weight:700;color:var(--navy);
+    -webkit-appearance:none;appearance:none;background-image:
+    linear-gradient(45deg,transparent 50%,#94a3b8 50%),
+    linear-gradient(135deg,#94a3b8 50%,transparent 50%);
+    background-position:calc(100% - 11px) 13px, calc(100% - 7px) 13px;
+    background-size:4px 4px, 4px 4px;background-repeat:no-repeat;
+    padding-right:20px;}
+  table.ws select option{font-weight:600;}
+
+  /* Row number cell */
+  table.ws .rownum{background:#f8fafc;text-align:center;font-weight:900;color:var(--navy);
+    font-size:10px;padding:9px 4px;border-right:1px solid var(--line);}
+  table.ws .rownum .addl{display:block;font-size:6.5px;color:var(--muted);
+    font-weight:700;letter-spacing:.05em;margin-top:2px;}
+
+  /* Select colour coding by value */
+  table.ws select[data-kind="rung"].vA{color:var(--a)}
+  table.ws select[data-kind="rung"].vD{color:var(--d)}
+  table.ws select[data-kind="rung"].vK{color:var(--k)}
+  table.ws select[data-kind="rung"].vAB{color:var(--ab)}
+  table.ws select[data-kind="rung"].vR{color:var(--navy)}
+  table.ws select[data-kind="move"]{color:var(--k4)}
+  table.ws select[data-kind="blocker"].vTools{color:var(--blue)}
+  table.ws select[data-kind="blocker"].vAccess{color:var(--teal)}
+  table.ws select[data-kind="blocker"].vTraining{color:var(--amber)}
+  table.ws select[data-kind="blocker"].vApprovals{color:var(--purple)}
+  table.ws select[data-kind="blocker"].vFunding{color:var(--orange)}
+  table.ws select[data-kind="result"].vImproved{color:var(--green);font-weight:900}
+  table.ws select[data-kind="result"].vFlat{color:var(--amber)}
+  table.ws select[data-kind="result"].vWorsened{color:var(--red)}
+  table.ws select[data-kind="result"].vEarly{color:var(--muted)}
+
+  /* ---------- SCORE TREND ---------- */
+  .trend{border:1px solid var(--line);border-radius:9px;overflow:hidden;}
+  table.tr{width:100%;border-collapse:collapse;font-size:9.5px;}
+  table.tr thead th{background:var(--navy);color:#fff;text-align:center;padding:6px 6px;
+    font-size:7px;text-transform:uppercase;letter-spacing:.07em;font-weight:800;}
+  table.tr thead th:first-child{background:#081c33;text-align:left;padding-left:10px;}
+  table.tr tbody td{padding:0;text-align:center;border-top:1px solid var(--line);}
+  table.tr tbody td:first-child{background:#f8fafc;font-weight:900;color:var(--navy);
+    font-size:9px;text-align:left;padding:6px 10px;}
+  table.tr tbody tr:nth-child(even) td:not(:first-child){background:#fcfdff;}
+  table.tr input{width:100%;border:none;background:transparent;font-family:inherit;
+    font-size:10px;font-weight:800;color:var(--navy);padding:6px 4px;outline:none;
+    text-align:center;}
+  table.tr input:focus{background:#f0fdfa;box-shadow:inset 0 0 0 1.5px var(--teal);}
+  table.tr input::placeholder{color:#e2e8f0;}
+  table.tr .delta{font-size:8px;font-weight:900;padding:2px 4px;border-radius:3px;}
+  table.tr tbody td input.d-up{color:var(--green)}
+  table.tr tbody td input.d-dn{color:var(--red)}
+
+  /* Rung column header colours */
+  .th-a{background:#0f766e !important}
+  .th-d{background:#0d9488 !important}
+  .th-k{background:#14b8a6 !important}
+  .th-ab{background:#0ea5a0 !important}
+  .th-r{background:#5eead4 !important;color:#0b2540 !important}
+
+  /* ---------- RECURRENCE TALLY ---------- */
+  .tally{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  @media(max-width:900px){.tally{grid-template-columns:1fr;}}
+  .tc{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff;}
+  .tc-h{padding:7px 12px;font-size:10px;font-weight:900;color:#fff;
+    display:flex;align-items:center;gap:7px;}
+  .tc-h .ic{width:17px;height:17px;border-radius:5px;background:rgba(255,255,255,.24);
+    display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;}
+  .tc-h .tot{margin-left:auto;font-size:8.5px;opacity:.85;font-weight:800;}
+  .t-rung .tc-h{background:linear-gradient(135deg,#0f766e,#0d9488)}
+  .t-move .tc-h{background:linear-gradient(135deg,#5b21b6,#7c3aed)}
+  .t-block .tc-h{background:linear-gradient(135deg,#1e40af,#1d4ed8)}
+  .tc-b{padding:6px 10px 8px;}
+  .trow{display:grid;grid-template-columns:64px 1fr 38px;gap:7px;align-items:center;
+    padding:4px 0;border-bottom:1px dotted #f1f5f9;font-size:9.3px;}
+  .trow:last-child{border-bottom:none;}
+  .trow .lb{font-weight:800;color:var(--navy);font-size:9.3px;
+    display:flex;align-items:center;gap:5px;line-height:1.2;}
+  .trow .lb .sw{width:8px;height:8px;border-radius:2px;flex:0 0 auto;}
+  .trow .bar{height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden;
+    display:flex;align-items:center;}
+  .trow .bar .fill{height:100%;border-radius:4px;transition:width .25s ease;}
+  .trow .ct{font-weight:900;font-size:10px;color:var(--navy);text-align:right;}
+  .trow .ct.zero{color:#cbd5e1;font-weight:600;}
+  .trow .ct.hot{color:var(--red);}
+
+  /* ---------- FLAG BAR ---------- */
+  .flags{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;padding:8px 11px;
+    background:#f8fafc;border:1px solid var(--line);border-radius:8px;font-size:9.3px;}
+  .flag{display:flex;align-items:center;gap:6px;padding:3px 9px;border-radius:6px;
+    font-weight:700;line-height:1.3;}
+  .flag.ok{background:var(--green-bg);color:#14532d}
+  .flag.warn{background:var(--amber-bg);color:#92400e}
+  .flag.hot{background:var(--red-bg);color:#9f1239}
+  .flag .ic{font-size:10px;font-weight:900;}
+
+  /* ---------- RULES ---------- */
+  .rules{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+  @media(max-width:760px){.rules{grid-template-columns:1fr;}}
+  .rb{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff;}
+  .rb-h{padding:7px 12px;font-size:10px;font-weight:900;display:flex;align-items:center;gap:7px;}
+  .rb-do .rb-h{background:#f0fdf4;color:#14532d;border-bottom:1px solid #86efac;}
+  .rb-dont .rb-h{background:#fff1f2;color:#9f1239;border-bottom:1px solid #fda4af;}
+  .rb-h .ic{width:17px;height:17px;border-radius:5px;display:flex;align-items:center;
+    justify-content:center;font-size:9.5px;font-weight:900;color:#fff;}
+  .rb-do .rb-h .ic{background:var(--green)}
+  .rb-dont .rb-h .ic{background:var(--red)}
+  .rb ul{list-style:none;margin:0;padding:8px 12px 10px;}
+  .rb li{padding:4px 0 4px 15px;position:relative;font-size:9.3px;color:#334155;
+    line-height:1.42;border-bottom:1px dotted #f1f5f9;}
+  .rb li:last-child{border-bottom:none;}
+  .rb li::before{position:absolute;left:0;top:4px;font-size:9.3px;font-weight:900;}
+  .rb-do li::before{content:"✓";color:var(--green);}
+  .rb-dont li::before{content:"✕";color:var(--red);}
+  .rb li b{color:var(--navy);}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:#f8fafc;border-top:1.5px solid var(--navy);padding:8px 22px;
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:9.3px;color:var(--muted);}
+  footer .fo{flex:1 1 auto;min-width:250px;line-height:1.5;}
+  footer b{color:var(--navy);}
+  .pills{display:flex;gap:4px;flex-wrap:wrap;}
+  .pill{font-size:8px;font-weight:900;padding:3px 8px;border-radius:5px;
+    border:1px solid var(--line);background:#fff;color:var(--muted);letter-spacing:.04em;}
+  .pill.on{background:var(--teal);border-color:var(--teal);color:#fff;}
+
+  /* ---------- PRINT ---------- */
+  @media print{
+    body{background:#fff;padding:0;font-size:8.3px;}
+    .sheet{box-shadow:none;border-radius:0;max-width:none;}
+    .sec{padding:6px 14px 7px;break-inside:avoid;}
+    header{padding:9px 14px;}
+    .toolbar{display:none;}
+    .tw{overflow:visible;border:none;}
+    table.ws{min-width:0;font-size:7.5px;table-layout:auto;}
+    table.ws thead th{font-size:6px;padding:3px 4px;}
+    table.ws input,table.ws select,table.ws textarea{
+      padding:5px 5px;font-size:7.5px;border-bottom:1px solid #cbd5e1;}
+    table.ws textarea{min-height:28px;}
+    table.ws select{background-image:none;padding-right:5px;}
+    table.ws input::placeholder,table.ws textarea::placeholder{color:transparent;}
+    table.ws select{color:transparent;}
+    table.ws select option{color:#0b2540;}
+    .trend,.tally,.rules{break-inside:avoid;}
+    .flags{break-inside:avoid;}
+    @page{margin:8mm;size:A4 landscape;}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- ============ HEADER ============ -->
+  <header>
+    <div class="ttl">
+      <p class="eyebrow">ADKAR × Kotter · Working Worksheet</p>
+      <h1>Diagnostic Cycle Log — SEWS v2.3</h1>
+      <p class="q">One row per review cycle. Track which rung broke, which structural move caused it, and whether the fix moved the score.</p>
+    </div>
+    <div class="pos">
+      <b>Cycles to date: <span id="cycleCount">0</span></b>
+      Live tallies · auto-computed below<br>
+      Print landscape for a working copy
+    </div>
+  </header>
+
+  <!-- ============ 1. IDENTIFICATION ============ -->
+  <div class="sec">
+    <div class="sec-h">
+      <span class="n">1</span>
+      <h2>Worksheet Identification</h2>
+      <span class="hint">Complete once per program</span>
+    </div>
+    <div class="ident">
+      <div class="idf"><label>Program / System</label><input type="text" placeholder="e.g. SEWS v2.3" value="SEWS v2.3"></div>
+      <div class="idf"><label>Worksheet Owner</label><input type="text" placeholder="Change Lead"></div>
+      <div class="idf"><label>Co-owner</label><input type="text" placeholder="CNIO"></div>
+      <div class="idf"><label>Review Cadence</label><input type="text" placeholder="Weekly loop · monthly survey"></div>
+    </div>
+  </div>
+
+  <!-- ============ 2. CYCLE LOG ============ -->
+  <div class="sec">
+    <div class="sec-h">
+      <span class="n">2</span>
+      <h2>The Cycle Log</h2>
+      <span class="hint">One row per cycle · fill left to right · complete the "Next Result" when the following cycle closes</span>
+    </div>
+
+    <p class="lede">Each row captures one full diagnostic pass. The <b>Broken Rung</b> comes from the ADKAR survey. The <b>Deficient Move</b> and <b>Blocker Category</b> come from the routing table. If the same blocker appears three cycles running, the problem is systemic — escalate it. <b>Do not retrain an Ability failure.</b></p>
+
+    <div class="toolbar">
+      <span class="tl">Add cycles below. Values recalculate the tallies instantly.</span>
+      <button class="btn primary" onclick="addRow()">+ Add cycle</button>
+      <button class="btn danger" onclick="clearAll()">Clear all</button>
+      <button class="btn" onclick="window.print()">⎙ Print</button>
+    </div>
+
+    <div class="tw">
+      <table class="ws" id="wsTable">
+        <thead>
+          <tr>
+            <th style="width:44px;">Cycle<span class="req"># / date</span></th>
+            <th style="width:78px;">Broken Rung<span class="req">A · D · K · AB · R</span></th>
+            <th style="width:200px;">What We Heard<span class="req">verbatim, not paraphrase</span></th>
+            <th style="width:112px;">Deficient Move<span class="req">Kotter 1–5</span></th>
+            <th style="width:112px;">Blocker Category<span class="req">structural cause</span></th>
+            <th style="width:220px;">Fix Applied + Owner<span class="req">what changed · who shipped it</span></th>
+            <th style="width:78px;">Shipped<span class="req">date</span></th>
+            <th style="width:98px;">Next Result<span class="req">did the score move?</span></th>
+          </tr>
+        </thead>
+        <tbody id="wsBody">
+          <!-- rows injected by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ 3. SCORE TREND ============ -->
+  <div class="sec">
+    <div class="sec-h">
+      <span class="n">3</span>
+      <h2>ADKAR Score Trend</h2>
+      <span class="hint">Enter survey averages per cycle · watch the trajectory, not the level</span>
+    </div>
+
+    <p class="lede">A score of 3.4 is meaningless on its own. The question is whether it's moving. Enter the two-item average for each element per cycle — the pattern of movement tells you whether your fixes are landing.</p>
+
+    <div class="trend">
+      <table class="tr">
+        <thead>
+          <tr>
+            <th style="width:120px;">Cycle</th>
+            <th class="th-a">A · Awareness</th>
+            <th class="th-d">D · Desire</th>
+            <th class="th-k">K · Knowledge</th>
+            <th class="th-ab">A · Ability</th>
+            <th class="th-r">R · Reinforcement</th>
+            <th style="width:120px;">Overall Notes</th>
+          </tr>
+        </thead>
+        <tbody id="trendBody">
+          <!-- rows injected by JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:9px;color:var(--muted);font-style:italic;margin:7px 0 0;">
+      Scoring: <b>4.0–5.0</b> Solid · <b>3.0–3.9</b> Fragile · <b>1.0–2.9</b> Broken. Exclude N/A responses from the average. A single cycle is a reading; two consistent cycles is a trend.
+    </p>
+  </div>
+
+  <!-- ============ 4. RECURRENCE TALLY ============ -->
+  <div class="sec">
+    <div class="sec-h">
+      <span class="n">4</span>
+      <h2>Recurrence Tally</h2>
+      <span class="hint">Auto-computed from the cycle log · spot the systemic pattern</span>
+    </div>
+
+    <div class="tally">
+
+      <div class="tc t-rung">
+        <div class="tc-h"><span class="ic">A</span>By Broken Rung<span class="tot" id="rungTotal">0 cycles</span></div>
+        <div class="tc-b" id="rungTally">
+          <!-- rows injected -->
+        </div>
+      </div>
+
+      <div class="tc t-move">
+        <div class="tc-h"><span class="ic">K</span>By Deficient Move<span class="tot" id="moveTotal">0 cycles</span></div>
+        <div class="tc-b" id="moveTally">
+          <!-- rows injected -->
+        </div>
+      </div>
+
+      <div class="tc t-block">
+        <div class="tc-h"><span class="ic">!</span>By Blocker Category<span class="tot" id="blockTotal">0 cycles</span></div>
+        <div class="tc-b" id="blockTally">
+          <!-- rows injected -->
+        </div>
+      </div>
+
+    </div>
+
+    <div class="flags" id="flagBar">
+      <span class="flag ok"><span class="ic">✓</span>No pattern yet — log a full cycle to see flags</span>
+    </div>
+  </div>
+
+  <!-- ============ 5. RULES ============ -->
+  <div class="sec">
+    <div class="sec-h">
+      <span class="n">5</span>
+      <h2>Rules of Use</h2>
+      <span class="hint">The worksheet fails if these are broken</span>
+    </div>
+
+    <div class="rules">
+      <div class="rb rb-do">
+        <div class="rb-h"><span class="ic">✓</span>Do</div>
+        <ul>
+          <li><b>Write what you heard, verbatim.</b> "No time" and "doesn't fit my workflow" route to different fixes. Paraphrase destroys the diagnostic.</li>
+          <li><b>Route before you fix.</b> Identify the deficient move and blocker category <em>before</em> deciding what to do. The order is the discipline.</li>
+          <li><b>Complete "Next Result" one cycle later.</b> A fix without a measurement is a guess. The whole point of the log is seeing what worked.</li>
+          <li><b>Escalate when a blocker repeats 3×.</b> Three appearances of the same category means the fix isn't touching the root cause.</li>
+          <li><b>Keep the log in one place.</b> Two logs, two versions, two realities — the pattern gets lost.</li>
+        </ul>
+      </div>
+      <div class="rb rb-dont">
+        <div class="rb-h"><span class="ic">✕</span>Don't</div>
+        <ul>
+          <li><b>Don't log a cycle without a survey.</b> The rung has to come from measurement, not from memory of complaints.</li>
+          <li><b>Don't retrain when Ability is the broken rung.</b> This is the single most common misdiagnosis. Ability failures are structural — fix the tool, the access, or the workflow.</li>
+          <li><b>Don't compress multiple fixes into one row.</b> If three changes shipped, log three rows. Otherwise you can't tell which one moved the score.</li>
+          <li><b>Don't act on one low score.</b> One cycle is a reading. Look for the trend and the concentration before spending money.</li>
+          <li><b>Don't leave "Next Result" blank.</b> An unmeasured fix is a story, not a control.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="fo">
+      <b>Worksheet Owner:</b> Change Lead · <b>Co-owner:</b> CNIO · <b>Version</b> 1.0 · <b>Companion to:</b> ADKAR × Kotter Combined Diagnostic<br>
+      <b>Core principle:</b> A rung without a blocker is a diagnosis without a treatment. This log keeps the causal chain intact from symptom to fix to evidence.
+    </div>
+    <div class="pills">
+      <span class="pill on">Live tallies</span>
+      <span class="pill">Auto-computed</span>
+      <span class="pill">Print landscape</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  /* ============================================================
+     CONFIGURATION
+  ============================================================ */
+  const RUNG_OPTIONS = [
+    { v: '',           l: '— Select —' },
+    { v: 'A',          l: 'A — Awareness' },
+    { v: 'D',          l: 'D — Desire' },
+    { v: 'K',          l: 'K — Knowledge' },
+    { v: 'AB',         l: 'A — Ability' },
+    { v: 'R',          l: 'R — Reinforcement' }
+  ];
+  const MOVE_OPTIONS = [
+    { v: '',      l: '— Select —' },
+    { v: 'M1',    l: 'Move 1 · Urgency' },
+    { v: 'M2',    l: 'Move 2 · Coalition' },
+    { v: 'M3',    l: 'Move 3 · Vision' },
+    { v: 'M4',    l: 'Move 4 · Enable Action' },
+    { v: 'M5',    l: 'Move 5 · Wins + Anchor' }
+  ];
+  const BLOCKER_OPTIONS = [
+    { v: '',           l: '— Select —' },
+    { v: 'Tools',      l: 'Tools' },
+    { v: 'Access',     l: 'Access' },
+    { v: 'Training',   l: 'Training' },
+    { v: 'Approvals',  l: 'Approvals' },
+    { v: 'Funding',    l: 'Funding' }
+  ];
+  const RESULT_OPTIONS = [
+    { v: '',         l: '— Pending —' },
+    { v: 'Improved', l: '✓ Improved' },
+    { v: 'Flat',     l: '→ Flat' },
+    { v: 'Worsened', l: '✕ Worsened' },
+    { v: 'Early',    l: '◷ Too early' }
+  ];
+
+  const RUNG_META = {
+    'A':  { label: 'Awareness',     color: '#0f766e' },
+    'D':  { label: 'Desire',        color: '#0d9488' },
+    'K':  { label: 'Knowledge',     color: '#14b8a6' },
+    'AB': { label: 'Ability',       color: '#0ea5a0' },
+    'R':  { label: 'Reinforcement', color: '#5eead4' }
+  };
+  const MOVE_META = {
+    'M1': { label: 'Move 1 · Urgency',        color: '#4c1d95' },
+    'M2': { label: 'Move 2 · Coalition',      color: '#5b21b6' },
+    'M3': { label: 'Move 3 · Vision',         color: '#6d28d9' },
+    'M4': { label: 'Move 4 · Enable Action',  color: '#7c3aed' },
+    'M5': { label: 'Move 5 · Wins + Anchor',  color: '#a78bfa' }
+  };
+  const BLOCK_META = {
+    'Tools':     { label: 'Tools',     color: '#1d4ed8' },
+    'Access':    { label: 'Access',    color: '#0d9488' },
+    'Training':  { label: 'Training',  color: '#b45309' },
+    'Approvals': { label: 'Approvals', color: '#6d28d9' },
+    'Funding':   { label: 'Funding',   color: '#c2410c' }
+  };
+
+  const STARTING_ROWS = 8;
+  const TREND_ROWS    = 8;
+
+  /* ============================================================
+     BUILD CYCLE LOG ROWS
+  ============================================================ */
+  function buildSelect(kind, options, className) {
+    const sel = document.createElement('select');
+    sel.dataset.kind = kind;
+    sel.className = className || '';
+    options.forEach(o => {
+      const opt = document.createElement('option');
+      opt.value = o.v;
+      opt.textContent = o.l;
+      sel.appendChild(opt);
+    });
+    return sel;
+  }
+
+  function buildRow(index) {
+    const tr = document.createElement('tr');
+    tr.dataset.cycle = index;
+
+    // Row number
+    const tdNum = document.createElement('td');
+    tdNum.className = 'rownum';
+    tdNum.innerHTML = `C${index}<span class="addl">cycle</span>`;
+    tr.appendChild(tdNum);
+
+    // Broken rung
+    const tdRung = document.createElement('td');
+    const rungSel = buildSelect('rung', RUNG_OPTIONS);
+    rungSel.dataset.cycle = index;
+    tdRung.appendChild(rungSel);
+    tr.appendChild(tdRung);
+
+    // What we heard
+    const tdHeard = document.createElement('td');
+    const heardInput = document.createElement('input');
+    heardInput.type = 'text';
+    heardInput.placeholder = 'e.g. "I know how, but there\'s no time"';
+    tdHeard.appendChild(heardInput);
+    tr.appendChild(tdHeard);
+
+    // Deficient move
+    const tdMove = document.createElement('td');
+    const moveSel = buildSelect('move', MOVE_OPTIONS);
+    moveSel.dataset.cycle = index;
+    tdMove.appendChild(moveSel);
+    tr.appendChild(tdMove);
+
+    // Blocker category
+    const tdBlock = document.createElement('td');
+    const blockSel = buildSelect('blocker', BLOCKER_OPTIONS);
+    blockSel.dataset.cycle = index;
+    tdBlock.appendChild(blockSel);
+    tr.appendChild(tdBlock);
+
+    // Fix applied + owner
+    const tdFix = document.createElement('td');
+    const fixInput = document.createElement('input');
+    fixInput.type = 'text';
+    fixInput.placeholder = 'e.g. "One-click acknowledge — IT Ops"';
+    tdFix.appendChild(fixInput);
+    tr.appendChild(tdFix);
+
+    // Shipped date
+    const tdDate = document.createElement('td');
+    const dateInput = document.createElement('input');
+    dateInput.type = 'date';
+    tdDate.appendChild(dateInput);
+    tr.appendChild(tdDate);
+
+    // Next result
+    const tdResult = document.createElement('td');
+    const resultSel = buildSelect('result', RESULT_OPTIONS);
+    resultSel.dataset.cycle = index;
+    tdResult.appendChild(resultSel);
+    tr.appendChild(tdResult);
+
+    return tr;
+  }
+
+  function initLog() {
+    const body = document.getElementById('wsBody');
+    for (let i = 1; i <= STARTING_ROWS; i++) {
+      body.appendChild(buildRow(i));
+    }
+    bindSelectColoring();
+    bindInputs();
+  }
+
+  function addRow() {
+    const body = document.getElementById('wsBody');
+    const next = body.children.length + 1;
+    const row = buildRow(next);
+    body.appendChild(row);
+    bindSelectColoring();
+    bindInputs();
+    recalc();
+    updateCycleCount();
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  /* ============================================================
+     SELECT VALUE COLORING (applies CSS classes based on value)
+  ============================================================ */
+  function bindSelectColoring() {
+    document.querySelectorAll('table.ws select').forEach(sel => {
+      // remove all value classes first
+      sel.classList.forEach(c => {
+        if (c.startsWith('v')) sel.classList.remove(c);
+      });
+      // apply the value class based on current value
+      if (sel.value) sel.classList.add('v' + sel.value);
+      sel.onchange = () => {
+        sel.classList.forEach(c => {
+          if (c.startsWith('v')) sel.classList.remove(c);
+        });
+        if (sel.value) sel.classList.add('v' + sel.value);
+        recalc();
+      };
+    });
+  }
+
+  /* ============================================================
+     BIND INPUTS FOR RECALC
+  ============================================================ */
+  function bindInputs() {
+    document.querySelectorAll('table.ws input').forEach(inp => {
+      inp.oninput = recalc;
+    });
+  }
+
+  /* ============================================================
+     INIT TREND GRID
+  ============================================================ */
+  function initTrend() {
+    const body = document.getElementById('trendBody');
+    for (let i = 1; i <= TREND_ROWS; i++) {
+      const tr = document.createElement('tr');
+      let html = `<td>C${i}</td>`;
+      ['A', 'D', 'K', 'AB', 'R'].forEach(() => {
+        html += `<td><input type="text" inputmode="decimal" placeholder="—" maxlength="4"></td>`;
+      });
+      html += `<td><input type="text" placeholder="notes"></td>`;
+      tr.innerHTML = html;
+      body.appendChild(tr);
+    }
+  }
+
+  /* ============================================================
+     LIVE RECURRENCE TALLY
+  ============================================================ */
+  function recalc() {
+    const rungs   = { A: 0, D: 0, K: 0, AB: 0, R: 0 };
+    const moves   = { M1: 0, M2: 0, M3: 0, M4: 0, M5: 0 };
+    const blocks  = { Tools: 0, Access: 0, Training: 0, Approvals: 0, Funding: 0 };
+    let totalCycles = 0;
+
+    document.querySelectorAll('table.ws tbody tr').forEach(tr => {
+      const rungSel   = tr.querySelector('select[data-kind="rung"]');
+      const moveSel   = tr.querySelector('select[data-kind="move"]');
+      const blockSel  = tr.querySelector('select[data-kind="blocker"]');
+      const heard     = tr.querySelector('input[type="text"]');
+      const fix       = tr.querySelectorAll('input[type="text"]')[1];
+
+      let hasContent = false;
+      if (rungSel  && rungs[rungSel.value] !== undefined) { rungs[rungSel.value]++; hasContent = true; }
+      if (moveSel  && moves[moveSel.value] !== undefined) { moves[moveSel.value]++; hasContent = true; }
+      if (blockSel && blocks[blockSel.value] !== undefined) { blocks[blockSel.value]++; hasContent = true; }
+
+      if (hasContent) totalCycles++;
+    });
+
+    renderTally('rungTally',  rungs,  RUNG_META,  totalCycles);
+    renderTally('moveTally',  moves,  MOVE_META,  totalCycles);
+    renderTally('blockTally', blocks, BLOCK_META, totalCycles);
+
+    document.getElementById('rungTotal').textContent  = totalCycles + ' cycles';
+    document.getElementById('moveTotal').textContent  = totalCycles + ' cycles';
+    document.getElementById('blockTotal').textContent = totalCycles + ' cycles';
+
+    updateFlags(rungs, moves, blocks, totalCycles);
+    updateCycleCount();
+  }
+
+  function renderTally(targetId, counts, meta, max) {
+    const host = document.getElementById(targetId);
+    const order = Object.keys(meta);
+    host.innerHTML = order.map(k => {
+      const c = counts[k] || 0;
+      const pct = max > 0 ? Math.round((c / max) * 100) : 0;
+      const hot = c >= 3 ? ' hot' : (c === 0 ? ' zero' : '');
+      return `<div class="trow">
+        <span class="lb"><span class="sw" style="background:${meta[k].color}"></span>${meta[k].label}</span>
+        <span class="bar"><span class="fill" style="width:${pct}%;background:${meta[k].color}"></span></span>
+        <span class="ct${hot}">${c}</span>
+      </div>`;
+    }).join('');
+  }
+
+  /* ============================================================
+     FLAG LOGIC
+  ============================================================ */
+  function updateFlags(rungs, moves, blocks, total) {
+    const bar = document.getElementById('flagBar');
+    const flags = [];
+
+    if (total === 0) {
+      bar.innerHTML = '<span class="flag ok"><span class="ic">✓</span>No pattern yet — log a full cycle to see flags</span>';
+      return;
+    }
+
+    // Rule 1: same blocker category 3+ times → systemic
+    Object.keys(blocks).forEach(k => {
+      if (blocks[k] >= 3) {
+        flags.push(`<span class="flag hot"><span class="ic">!</span><b>${k}</b> blocked ${blocks[k]}× — systemic, escalate</span>`);
+      } else if (blocks[k] === 2) {
+        flags.push(`<span class="flag warn"><span class="ic">▲</span><b>${k}</b> blocked ${blocks[k]}× — watch for a third</span>`);
+      }
+    });
+
+    // Rule 2: same rung 3+ times → training or design problem recurring
+    Object.keys(rungs).forEach(k => {
+      if (rungs[k] >= 3) {
+        const label = RUNG_META[k].label;
+        const note = (k === 'AB')
+          ? 'Ability repeated — do not retrain, fix the structure'
+          : `${label} repeated — check whether the fix is landing`;
+        flags.push(`<span class="flag hot"><span class="ic">!</span><b>${label}</b> broken ${rungs[k]}× — ${note}</span>`);
+      }
+    });
+
+    // Rule 3: Move 4 appearing repeatedly → structural under-resourcing
+    if (moves['M4'] >= 3) {
+      flags.push(`<span class="flag hot"><span class="ic">!</span>Move 4 (Enable Action) deficient ${moves['M4']}× — the load-bearing move is under-resourced</span>`);
+    } else if (moves['M4'] === 2) {
+      flags.push(`<span class="flag warn"><span class="ic">▲</span>Move 4 deficient 2× — check funding and tooling</span>`);
+    }
+
+    if (flags.length === 0) {
+      flags.push('<span class="flag ok"><span class="ic">✓</span>No repeated pattern yet — 2 consecutive cycles needed to confirm a trend</span>');
+    }
+
+    bar.innerHTML = flags.join('');
+  }
+
+  /* ============================================================
+     CYCLE COUNT
+  ============================================================ */
+  function updateCycleCount() {
+    let n = 0;
+    document.querySelectorAll('table.ws tbody tr').forEach(tr => {
+      const rungSel = tr.querySelector('select[data-kind="rung"]');
+      if (rungSel && rungSel.value) n++;
+    });
+    document.getElementById('cycleCount').textContent = n;
+  }
+
+  /* ============================================================
+     CLEAR
+  ============================================================ */
+  function clearAll() {
+    if (!confirm('Clear all cycles, scores, and tallies?')) return;
+    document.querySelectorAll('table.ws tbody tr').forEach(tr => {
+      tr.querySelectorAll('input, select, textarea').forEach(el => {
+        if (el.tagName === 'SELECT') el.selectedIndex = 0;
+        else el.value = '';
+        el.classList.forEach(c => { if (c.startsWith('v')) el.classList.remove(c); });
+      });
+    });
+    document.querySelectorAll('#trendBody input').forEach(inp => inp.value = '');
+    recalc();
+  }
+
+  /* ============================================================
+     INIT
+  ============================================================ */
+  initLog();
+  initTrend();
+  recalc();
+</script>
+</body>
+</html>
