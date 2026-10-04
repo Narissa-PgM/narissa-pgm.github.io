@@ -1,6 +1,6 @@
-# NasdaqGuru Portfolio
+# Narissara Khomkhai | Program Management Portfolio
 
-This repository publishes the public portfolio through GitHub Pages at `nasdaqguru.github.io`.
+This repository publishes Narissara Khomkhai's program management and data strategy portfolio through GitHub Pages at `narissa-pgm.github.io`.
 
 ## Structure
 
@@ -14,6 +14,8 @@ This repository publishes the public portfolio through GitHub Pages at `nasdaqgu
 ## URL compatibility
 
 Existing project URLs remain as small redirect pages at their original paths. Do not remove those redirect files unless external links, bookmarks, and search results using the prior address have been deliberately retired.
+
+GitHub does not redirect the previous Pages site hostname after a username change. Update links in resumes, LinkedIn, email signatures, and other sites to use `https://narissa-pgm.github.io/`.
 
 When adding a new page, place it in the appropriate directory and use root-relative links, such as `/projects/advancement/example.html`. Root-relative links continue to work regardless of the folder depth of the page containing the link.
 

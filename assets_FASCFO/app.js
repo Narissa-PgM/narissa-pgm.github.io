@@ -489,7 +489,7 @@
     url.searchParams.set("owner_email", contact.email);
     url.searchParams.set("response", choice || "On track");
     url.searchParams.set("deadline", signal.due);
-    url.searchParams.set("source", "NasdaqGuru.github.io CFO dashboard");
+    url.searchParams.set("source", "narissa-pgm.github.io CFO dashboard");
     return url.toString();
   }
 
