@@ -1,0 +1,2661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narissa's Data Analytics Course · Modules 1, 2 &amp; 3</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f4f7fc;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            margin: 0;
+        }
+        .app-wrapper { max-width: 1150px; width: 100%; margin: 0 auto; }
+
+        /* ---------- header ---------- */
+        .app-header { text-align: center; margin-bottom: 1.5rem; }
+        .app-header h1 {
+            font-size: 1.9rem; font-weight: 800; color: #0a1e2f;
+            letter-spacing: -0.03em; display: flex; align-items: center;
+            justify-content: center; gap: 12px; flex-wrap: wrap;
+        }
+        .app-header h1 .logo-dot {
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 14px; display: inline-flex; align-items: center;
+            justify-content: center; font-size: 1.2rem; color: white;
+            box-shadow: 0 8px 18px -6px rgba(29, 78, 216, 0.45); flex-shrink: 0;
+        }
+        .app-header h1 .brand-name {
+            background: linear-gradient(135deg, #0a1e2f, #1d4ed8);
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .app-header p { color: #4e6d8c; font-size: 0.95rem; margin-top: 0.4rem; }
+
+        /* ---------- module tracker ---------- */
+        .module-tracker {
+            display: flex; justify-content: center; align-items: center;
+            gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem;
+            padding: 0.75rem 1rem; background: #ffffff; border-radius: 22px;
+            box-shadow: 0 6px 16px -8px rgba(10, 30, 47, 0.15), 0 2px 4px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e6eff8;
+        }
+        .module-tracker .tracker-label {
+            font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.6px; color: #5b7c9b; margin-right: 0.5rem;
+        }
+        .module-pip {
+            width: 30px; height: 30px; border-radius: 10px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 0.72rem; font-weight: 700; background: #eef4fb;
+            color: #7b98b8; border: 1px solid #dbe7f2;
+            transition: transform 0.15s, background 0.2s, color 0.2s, border-color 0.2s;
+            position: relative; cursor: default;
+        }
+        .module-pip.active {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white; border-color: #1d4ed8;
+            box-shadow: 0 6px 12px -4px rgba(29, 78, 216, 0.5);
+            transform: translateY(-2px);
+        }
+        .module-pip.active::after {
+            content: ''; position: absolute; bottom: -7px; left: 50%;
+            transform: translateX(-50%); width: 5px; height: 5px;
+            border-radius: 50%; background: #1d4ed8;
+        }
+        .module-pip.available { background: #e3f5e8; color: #1e6b34; border-color: #b7e4c7; }
+        .module-pip.available.active {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white; border-color: #1d4ed8;
+        }
+        .module-pip.upcoming {
+            background: #f4f7fc; color: #b0c4d6;
+            border-color: #e6eff8; border-style: dashed;
+        }
+        .module-pip .pip-tooltip {
+            display: none; position: absolute; bottom: 130%; left: 50%;
+            transform: translateX(-50%); background: #0a1e2f; color: white;
+            font-size: 0.68rem; font-weight: 600; padding: 0.3rem 0.65rem;
+            border-radius: 8px; white-space: nowrap; letter-spacing: 0.2px; z-index: 10;
+        }
+        .module-pip:hover .pip-tooltip { display: block; }
+        .module-tracker .tracker-progress {
+            font-size: 0.75rem; font-weight: 700; color: #1d4ed8;
+            background: #eaf1fb; padding: 0.3rem 0.8rem; border-radius: 30px;
+            margin-left: 0.5rem; letter-spacing: 0.2px;
+        }
+
+        /* ---------- tabs ---------- */
+        .tab-bar {
+            display: flex; gap: 0.5rem; background: #eaf1fb;
+            padding: 0.45rem; border-radius: 20px; margin-bottom: 1.5rem;
+            box-shadow: inset 0 2px 4px rgba(0, 30, 60, 0.04);
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            flex: 1; border: none; font-family: inherit; font-size: 0.9rem;
+            font-weight: 700; padding: 0.85rem 1rem; border-radius: 16px;
+            background: transparent; color: #4a6a8a; cursor: pointer;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; letter-spacing: -0.01em; min-width: 0;
+        }
+        .tab-btn:hover { background: #dfeaf8; color: #0a1e2f; }
+        .tab-btn.active {
+            background: #ffffff; color: #0a1e2f;
+            box-shadow: 0 6px 14px -6px rgba(10, 30, 47, 0.18), 0 2px 4px rgba(0, 0, 0, 0.03);
+        }
+        .tab-btn .tab-icon { font-size: 1.05rem; }
+        .tab-btn .tab-num {
+            background: #cbdbe9; color: #1e3e5c; font-size: 0.68rem;
+            font-weight: 700; padding: 0.15rem 0.55rem; border-radius: 30px;
+            letter-spacing: 0.3px; flex-shrink: 0;
+        }
+        .tab-btn.active .tab-num { background: #3b82f6; color: white; }
+
+        /* ---------- panels ---------- */
+        .tab-panel { display: none; animation: fadeIn 0.25s ease; }
+        .tab-panel.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card {
+            background: white; border-radius: 32px;
+            box-shadow: 0 20px 35px -8px rgba(0, 20, 40, 0.25), 0 8px 12px -4px rgba(0, 0, 0, 0.05);
+            padding: 2rem 2rem 2.5rem;
+        }
+
+        h2.section-title {
+            font-size: 1.45rem; font-weight: 700; color: #0a1e2f;
+            margin: 2.5rem 0 0.5rem; display: flex; align-items: center;
+            gap: 12px; letter-spacing: -0.01em; flex-wrap: wrap;
+        }
+        h2.section-title:first-of-type { margin-top: 0.5rem; }
+        h2.section-title .section-badge {
+            background: #3b82f6; color: white; font-size: 0.7rem;
+            font-weight: 600; padding: 0.3rem 0.9rem; border-radius: 40px;
+            letter-spacing: 0.3px; text-transform: uppercase;
+        }
+        .section-divider {
+            border: none; border-top: 2px dashed #cddef0; margin: 2rem 0 0.5rem;
+        }
+        .subhead {
+            color: #2b4b6a; font-size: 1.05rem; margin-bottom: 1.75rem;
+            font-weight: 400; border-left: 4px solid #3b82f6;
+            padding-left: 1rem; background: #f0f7ff;
+            border-radius: 0 12px 12px 0; line-height: 1.4;
+        }
+        .subhead strong { color: #0a1e2f; font-weight: 600; }
+
+        /* ---------- concept panels ---------- */
+        .concepts-panel {
+            background: #f8fbfe; border: 1px solid #dbe7f2;
+            border-radius: 22px; padding: 1.4rem 1.6rem;
+            margin-bottom: 2rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+        }
+        .concepts-panel h3 {
+            font-size: 1.05rem; font-weight: 700; color: #0a1e2f;
+            margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;
+        }
+        .concepts-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.25rem 2rem;
+        }
+        .concept-group h4 {
+            font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.6px; color: #2b6ed9; margin-bottom: 0.65rem;
+            padding-bottom: 0.3rem; border-bottom: 1px solid #dbe7f2;
+        }
+        .concept-list {
+            list-style: none; padding: 0; margin: 0;
+            display: flex; flex-direction: column; gap: 0.45rem;
+        }
+        .concept-list li {
+            font-size: 0.9rem; color: #1e3a5c; line-height: 1.45;
+            display: flex; gap: 8px;
+        }
+        .concept-list li strong { color: #0a1e2f; font-weight: 700; flex-shrink: 0; }
+        .concept-list li .arrow { color: #3b82f6; font-weight: 700; flex-shrink: 0; }
+
+        /* ---------- exercise cards ---------- */
+        .exercise-intro {
+            background: #fff8e6; border: 1px solid #f0d9a0;
+            border-radius: 16px; padding: 1rem 1.35rem; margin-bottom: 1.5rem;
+            font-size: 0.92rem; color: #6b4d0c; line-height: 1.55;
+            display: flex; gap: 10px; align-items: flex-start;
+        }
+        .exercise-intro i { font-style: normal; font-size: 1.2rem; flex-shrink: 0; }
+
+        .ex-card {
+            background: #ffffff; border: 1px solid #d6e5f2;
+            border-radius: 24px; padding: 1.5rem 1.75rem 1.75rem;
+            margin-bottom: 1.75rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+            transition: border 0.2s;
+        }
+        .ex-card:hover { border-color: #b6d0ea; }
+        .ex-card .ex-question {
+            display: flex; gap: 12px; align-items: flex-start;
+            margin-bottom: 1.25rem;
+        }
+        .ex-card .ex-question .q-mark {
+            width: 32px; height: 32px; border-radius: 10px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white; font-weight: 800; font-size: 0.95rem;
+            display: inline-flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .ex-card .ex-question .q-text {
+            font-size: 1.1rem; font-weight: 700; color: #0a1e2f;
+            line-height: 1.45; letter-spacing: -0.01em;
+        }
+
+        .sample-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0.85rem; margin-bottom: 1.35rem;
+        }
+        .method-chip {
+            background: #f8fbfe; border: 2px solid #e2ecf7;
+            border-radius: 16px; padding: 0.85rem 1rem;
+            cursor: pointer; transition: border 0.2s, background 0.2s, box-shadow 0.2s;
+            user-select: none; position: relative;
+        }
+        .method-chip:hover {
+            border-color: #b6d0ea; background: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 40, 80, 0.05);
+        }
+        .method-chip.selected {
+            border-color: #3b82f6; background: #f2f8ff;
+            box-shadow: 0 6px 14px rgba(59, 130, 246, 0.12);
+        }
+        .method-chip.revealed-correct {
+            border-color: #27ae60; background: #f0faf3;
+            box-shadow: 0 6px 14px rgba(39, 174, 96, 0.12);
+        }
+        .method-chip .method-name {
+            font-weight: 800; font-size: 0.95rem; color: #0a1e2f;
+            margin-bottom: 0.35rem; display: flex; align-items: center; gap: 6px;
+        }
+        .method-chip .method-name .dot {
+            width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+        }
+        .method-chip .method-desc {
+            font-size: 0.78rem; color: #4e6d8c; line-height: 1.4;
+        }
+        .method-chip .method-answer {
+            display: none; margin-top: 0.7rem; padding-top: 0.7rem;
+            border-top: 1px dashed #cbdbe9; font-size: 0.82rem;
+            color: #1e5a2b; line-height: 1.5;
+        }
+        .method-chip.revealed-correct .method-answer { display: block; }
+
+        .dot-blue { background: #3b82f6; }
+        .dot-purple { background: #8b5cf6; }
+        .dot-amber { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .model-answer-box {
+            background: #f0faf3; border: 1px solid #b7e4c7;
+            border-radius: 16px; padding: 1rem 1.25rem;
+            margin-top: 0.5rem; font-size: 0.9rem; color: #1e5a2b;
+            line-height: 1.55; display: none;
+        }
+        .model-answer-box.show { display: block; }
+        .model-answer-box .ma-label {
+            font-weight: 800; text-transform: uppercase; font-size: 0.72rem;
+            letter-spacing: 0.6px; color: #2f855a; margin-bottom: 0.4rem;
+            display: block;
+        }
+        .model-answer-box .ma-title {
+            font-size: 1.05rem; font-weight: 800; color: #14532d;
+            margin-bottom: 0.4rem; display: flex; align-items: center; gap: 8px;
+        }
+        .model-answer-box .ma-body { color: #1e5a2b; }
+        .model-answer-box .ma-body strong { color: #14532d; }
+
+        .reveal-btn {
+            border: none; font-family: inherit; font-weight: 600;
+            font-size: 0.85rem; padding: 0.55rem 1.25rem; border-radius: 40px;
+            background: #eaf1fb; color: #1d4ed8; cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 0.85rem;
+        }
+        .reveal-btn:hover { background: #dfeaf8; transform: translateY(-1px); }
+        .reveal-btn:active { transform: translateY(1px); }
+
+        /* ============================================ */
+        /* ---- MODULE 1 PART 2: BUSINESS MODEL SAMPLES ---- */
+        /* ============================================ */
+        .builder-intro {
+            background: linear-gradient(135deg, #eef6ff 0%, #e6f0fa 100%);
+            border: 1px solid #cfe2f5; border-radius: 20px;
+            padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;
+            border-left: 6px solid #3b82f6; font-size: 0.92rem;
+            color: #0f2c47; line-height: 1.6;
+        }
+        .builder-intro strong { color: #0a1e2f; }
+        .builder-intro .bi-title {
+            font-size: 0.95rem; font-weight: 800; color: #1d4ed8;
+            margin-bottom: 0.4rem; display: flex; align-items: center; gap: 8px;
+        }
+
+        .scenario-box {
+            background: #f8fbfe; border: 1px solid #dbe7f2;
+            border-radius: 20px; padding: 1.25rem 1.6rem;
+            margin-bottom: 1.75rem; border-left: 6px solid #8b5cf6;
+        }
+        .scenario-box .scenario-label {
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.6px; color: #6d28d9; margin-bottom: 0.4rem;
+        }
+        .scenario-box p {
+            color: #0f2c47; font-size: 1rem; line-height: 1.5;
+        }
+        .scenario-box p strong { color: #0a1e2f; }
+
+        .crisp-flow {
+            display: flex; flex-direction: column; gap: 1.5rem;
+        }
+        .crisp-step {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 1.25rem;
+            background: #ffffff;
+            border: 1px solid #d6e5f2;
+            border-radius: 24px;
+            padding: 1.5rem 1.75rem 1.6rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+            transition: border 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .crisp-step:hover {
+            border-color: #b6d0ea;
+            box-shadow: 0 8px 18px -6px rgba(0, 40, 80, 0.1);
+        }
+        .crisp-step .step-visual {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-start; gap: 0.5rem;
+        }
+        .crisp-step .step-num-circle {
+            width: 56px; height: 56px; border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; font-weight: 800; color: white;
+            box-shadow: 0 8px 16px -6px rgba(0, 0, 0, 0.25);
+            flex-shrink: 0;
+        }
+        .crisp-step .step-mini-label {
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; color: #7b98b8; text-align: center;
+            line-height: 1.2;
+        }
+        .crisp-step .step-body { display: flex; flex-direction: column; gap: 0.85rem; }
+        .crisp-step .step-head {
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+        }
+        .crisp-step .step-title {
+            font-size: 1.15rem; font-weight: 800; color: #0a1e2f;
+            letter-spacing: -0.01em;
+        }
+        .crisp-step .step-tag {
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.4px; padding: 0.22rem 0.7rem;
+            border-radius: 30px; background: #eaf1fb; color: #1d4ed8;
+        }
+
+        .best-practice {
+            background: #f0f7ff; border: 1px solid #cfe2f5;
+            border-radius: 14px; padding: 0.9rem 1.15rem;
+            font-size: 0.88rem; color: #1e3a5c; line-height: 1.55;
+        }
+        .best-practice .bp-label {
+            font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.5px; color: #1d4ed8; display: block;
+            margin-bottom: 0.35rem;
+        }
+        .best-practice ul {
+            margin: 0.35rem 0 0 0; padding-left: 1.1rem;
+        }
+        .best-practice ul li {
+            margin-bottom: 0.25rem;
+        }
+        .best-practice code {
+            background: #dbeafe; color: #1e40af;
+            padding: 0.05rem 0.35rem; border-radius: 5px;
+            font-size: 0.82rem;
+        }
+
+        .sample-phrases {
+            background: #f0faf3; border: 1px solid #b7e4c7;
+            border-radius: 14px; padding: 1rem 1.25rem 1.1rem;
+            font-size: 0.9rem; color: #1e5a2b; line-height: 1.6;
+        }
+        .sample-phrases .sp-label {
+            font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.5px; color: #2f855a; display: block;
+            margin-bottom: 0.55rem;
+        }
+        .sample-phrases .sp-row {
+            display: flex; gap: 10px; margin-bottom: 0.55rem;
+            align-items: flex-start;
+        }
+        .sample-phrases .sp-row:last-child { margin-bottom: 0; }
+        .sample-phrases .sp-key {
+            font-weight: 800; color: #2f855a; min-width: 100px;
+            flex-shrink: 0; font-size: 0.78rem; text-transform: uppercase;
+            letter-spacing: 0.3px; padding-top: 0.15rem;
+        }
+        .sample-phrases .sp-val { color: #14532d; }
+        .sample-phrases .sp-val strong { color: #14532d; }
+        .sample-phrases .sp-val em {
+            font-style: normal; color: #2f855a;
+            background: #d7f0e0; padding: 0.05rem 0.4rem;
+            border-radius: 5px; font-size: 0.82rem;
+        }
+
+        .mini-flow {
+            display: flex; flex-wrap: wrap; align-items: center;
+            gap: 0.5rem; margin-top: 0.15rem;
+        }
+        .mini-flow .mf-box {
+            background: #eaf1fb; color: #1d4ed8;
+            font-size: 0.72rem; font-weight: 700;
+            padding: 0.35rem 0.75rem; border-radius: 8px;
+            letter-spacing: 0.2px;
+        }
+        .mini-flow .mf-arrow { color: #94b0cc; font-weight: 800; font-size: 0.85rem; }
+
+        /* ---------- dataset table ---------- */
+        .dataset-container {
+            background: #ffffff; border: 1px solid #dbe7f2;
+            border-radius: 20px; overflow: hidden; margin-bottom: 2rem;
+            box-shadow: 0 6px 14px rgba(0, 20, 40, 0.04);
+        }
+        .table-header {
+            background: #eef4fb; padding: 0.9rem 1.5rem;
+            border-bottom: 1px solid #d0e0ef; font-weight: 600;
+            color: #0b2b44; font-size: 0.95rem; text-transform: uppercase;
+            letter-spacing: 0.4px; display: flex; justify-content: space-between;
+            align-items: center; flex-wrap: wrap; gap: 8px;
+        }
+        .table-header .badge {
+            background: #0a1e2f; color: white; font-size: 0.7rem;
+            padding: 0.25rem 0.8rem; border-radius: 30px;
+            text-transform: none; letter-spacing: 0.2px;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; background: white; }
+        th {
+            text-align: left; padding: 0.85rem 1rem; background: #f9fcff;
+            color: #1e3e5c; font-weight: 600; font-size: 0.78rem;
+            text-transform: uppercase; letter-spacing: 0.4px;
+            border-bottom: 1px solid #cbdbe9;
+        }
+        td {
+            padding: 0.75rem 1rem; border-bottom: 1px solid #e2edf7;
+            color: #102a3c;
+        }
+        tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background: #f4faff; }
+        .highlight-note {
+            background: #fef9e7; padding: 0.5rem 1.5rem 1.5rem 1.5rem;
+            border-top: 1px dashed #f7d57c; font-size: 0.9rem;
+            color: #6b4d0c; display: flex; align-items: center; gap: 8px;
+        }
+        .highlight-note i { font-style: normal; font-size: 1.1rem; }
+
+        /* formula display */
+        .formula-display {
+            background: #1e293b; color: #f1f5f9;
+            border-radius: 12px; padding: 0.85rem 1.1rem;
+            font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+            font-size: 0.85rem; line-height: 1.6;
+            overflow-x: auto; white-space: pre-wrap;
+            word-break: break-word;
+            margin: 0.5rem 0;
+        }
+        .formula-display .fn { color: #7dd3fc; font-weight: 700; }
+        .formula-display .arg { color: #fca5a5; }
+        .formula-display .str { color: #86efac; }
+        .formula-display .num { color: #fde68a; }
+        .formula-display .cmt { color: #94a3b8; font-style: italic; }
+
+        /* result table */
+        .result-table-wrap {
+            background: #ffffff; border: 1px solid #d6e5f2;
+            border-radius: 16px; overflow: hidden;
+            margin-top: 0.85rem;
+        }
+        .result-table-wrap table th {
+            background: #f0faf3; color: #14532d;
+        }
+        .result-table-wrap table td {
+            font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+            font-size: 0.82rem;
+        }
+        .result-table-wrap .cell-ok { color: #1e6b34; font-weight: 700; }
+        .result-table-wrap .cell-unknown { color: #a83232; font-weight: 700; }
+
+        /* ---------- option cards (Module 2) ---------- */
+        .question-block {
+            background: #ffffff; border: 1px solid #d6e5f2;
+            border-radius: 24px; padding: 1.6rem 1.8rem 1.8rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+            transition: border 0.2s; margin-bottom: 1.5rem;
+        }
+        .question-label {
+            font-weight: 700; font-size: 1.15rem; color: #0a1e2f;
+            margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;
+        }
+        .question-label .num {
+            background: #3b82f6; color: white; width: 28px; height: 28px;
+            border-radius: 30px; display: inline-flex; align-items: center;
+            justify-content: center; font-size: 0.95rem; font-weight: 600;
+            flex-shrink: 0;
+        }
+        .options-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem; margin-bottom: 1rem;
+        }
+        .option-card {
+            border: 2px solid #e2ecf7; border-radius: 20px;
+            padding: 1.25rem; background: #fbfdff; cursor: pointer;
+            transition: border 0.2s, background 0.2s, box-shadow 0.2s;
+            display: flex; flex-direction: column; gap: 0.85rem;
+            position: relative; user-select: none;
+        }
+        .option-card:hover {
+            border-color: #b6d0ea; background: #ffffff;
+            box-shadow: 0 6px 14px rgba(0, 40, 80, 0.06);
+        }
+        .option-card.selected {
+            border-color: #3b82f6; background: #f2f8ff;
+            box-shadow: 0 6px 14px rgba(59, 130, 246, 0.12);
+        }
+        .option-card.revealed-correct {
+            border-color: #27ae60; background: #f0faf3;
+            box-shadow: 0 6px 14px rgba(39, 174, 96, 0.12);
+        }
+        .option-header {
+            display: flex; align-items: center; gap: 0.6rem;
+            font-weight: 700; color: #0a1e2f; font-size: 1rem;
+        }
+        .option-header input[type="radio"],
+        .option-header input[type="checkbox"] {
+            width: 1.15rem; height: 1.15rem; accent-color: #2b6ed9;
+            margin: 0; cursor: pointer; flex-shrink: 0;
+        }
+        .option-header .option-title {
+            font-weight: 700; letter-spacing: -0.01em;
+        }
+        .sample-box {
+            background: #f4f8fe; border-radius: 12px;
+            padding: 0.75rem 0.9rem; font-size: 0.82rem; color: #1e3a5c;
+            line-height: 1.45; border: 1px solid #dbe7f2;
+            font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+            white-space: pre-wrap; word-break: break-word;
+        }
+        .sample-box .sample-label {
+            display: block; font-family: system-ui, 'Segoe UI', sans-serif;
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.4px; color: #5b7c9b; margin-bottom: 0.4rem;
+        }
+        .sample-box .example-row { display: block; margin-top: 0.2rem; color: #0d2b45; }
+        .sample-box .muted { color: #7b98b8; font-style: italic; }
+        .hint {
+            font-size: 0.85rem; margin-top: 0.5rem; color: #4e6d8c;
+            background: #edf4fc; padding: 0.7rem 1.1rem;
+            border-radius: 14px; display: inline-block;
+        }
+
+        /* ---------- source selection (Module 2) ---------- */
+        .scenario-box-m2 {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f0fa 100%);
+            border: 1px solid #cfe2f5; border-radius: 20px;
+            padding: 1.4rem 1.8rem; margin-bottom: 1.75rem;
+            border-left: 6px solid #3b82f6;
+        }
+        .scenario-box-m2 .scenario-label {
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.6px; color: #2b6ed9; margin-bottom: 0.4rem;
+        }
+        .scenario-box-m2 p {
+            color: #0f2c47; font-size: 1.05rem; line-height: 1.5;
+        }
+        .scenario-box-m2 p strong { color: #0a1e2f; }
+
+        .source-columns {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 1.75rem; margin-bottom: 1.5rem;
+        }
+        .source-column h3 {
+            font-size: 1.05rem; font-weight: 700; color: #0a1e2f;
+            margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;
+        }
+        .source-column h3 .col-icon { font-size: 1.2rem; }
+        .source-column.internal h3 { color: #1d4ed8; }
+        .source-column.external h3 { color: #b45309; }
+
+        .source-card {
+            border: 2px solid #e2ecf7; border-radius: 16px;
+            padding: 1rem 1.1rem; background: #fbfdff;
+            margin-bottom: 0.9rem;
+            transition: border 0.2s, background 0.2s, box-shadow 0.2s;
+            cursor: pointer; user-select: none;
+        }
+        .source-card:hover {
+            border-color: #b6d0ea; background: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 40, 80, 0.05);
+        }
+        .source-card.selected {
+            border-color: #3b82f6; background: #f2f8ff;
+            box-shadow: 0 6px 14px rgba(59, 130, 246, 0.1);
+        }
+        .source-card .source-header {
+            display: flex; align-items: center; gap: 0.6rem;
+            font-weight: 700; color: #0a1e2f; font-size: 0.95rem;
+            margin-bottom: 0.4rem;
+        }
+        .source-card .source-header input[type="checkbox"] {
+            width: 1.1rem; height: 1.1rem; accent-color: #2b6ed9;
+            margin: 0; cursor: pointer; flex-shrink: 0;
+        }
+        .source-card .source-desc {
+            font-size: 0.85rem; color: #3a5a7a;
+            line-height: 1.45; margin-bottom: 0.5rem;
+        }
+        .source-card .source-tag {
+            display: inline-block; font-size: 0.68rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.4px;
+            padding: 0.2rem 0.65rem; border-radius: 30px;
+        }
+        .tag-reliable { background: #e3f5e8; color: #1e6b34; }
+        .tag-risky { background: #fdeeee; color: #a83232; }
+        .tag-mixed { background: #fef5e0; color: #93630a; }
+
+        .best-sources-panel {
+            background: #f8fbfe; border: 1px solid #dbe7f2;
+            border-radius: 22px; padding: 1.4rem 1.6rem;
+            margin-top: 1.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+        }
+        .best-sources-panel h4 {
+            font-size: 1rem; font-weight: 700; color: #0a1e2f;
+            margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;
+        }
+        .best-sources-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem 2rem;
+        }
+        .best-sources-grid .bs-group h5 {
+            font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; color: #2b6ed9; margin-bottom: 0.6rem;
+            padding-bottom: 0.3rem; border-bottom: 1px solid #dbe7f2;
+        }
+        .best-sources-grid .bs-group ul {
+            list-style: none; padding: 0; margin: 0;
+            display: flex; flex-direction: column; gap: 0.45rem;
+        }
+        .best-sources-grid .bs-group li {
+            font-size: 0.9rem; color: #1e3a5c; line-height: 1.45;
+            display: flex; gap: 8px;
+        }
+        .best-sources-grid .bs-group li strong {
+            color: #0a1e2f; font-weight: 700; flex-shrink: 0;
+        }
+        .best-sources-grid .bs-group li .arrow {
+            color: #3b82f6; font-weight: 700; flex-shrink: 0;
+        }
+
+        .reasoning-panel {
+            background: #f8fbfe; border: 1px solid #dbe7f2;
+            border-radius: 20px; padding: 1.4rem 1.6rem; margin-top: 0.5rem;
+        }
+        .reasoning-panel h4 {
+            font-size: 0.95rem; font-weight: 700; color: #0a1e2f;
+            margin-bottom: 0.85rem; display: flex; align-items: center; gap: 8px;
+        }
+        .reasoning-item {
+            display: flex; gap: 10px; padding: 0.65rem 0.8rem;
+            border-radius: 12px; font-size: 0.88rem; line-height: 1.5;
+            margin-bottom: 0.5rem; background: #ffffff;
+            border: 1px solid #e6eff8; align-items: flex-start;
+        }
+        .reasoning-item:last-child { margin-bottom: 0; }
+        .reasoning-item .r-icon { flex-shrink: 0; font-size: 1.05rem; margin-top: 0.05rem; }
+        .reasoning-item .r-text { color: #1e3a5c; }
+        .reasoning-item .r-text strong { color: #0a1e2f; }
+        .reasoning-item .r-text .pro { color: #1e6b34; font-weight: 600; }
+        .reasoning-item .r-text .con { color: #a83232; font-weight: 600; }
+
+        /* ---------- shared actions ---------- */
+        .actions {
+            display: flex; flex-wrap: wrap; justify-content: flex-end;
+            align-items: center; gap: 1rem; margin-top: 1.25rem;
+        }
+        .btn {
+            border: none; font-family: inherit; font-weight: 600;
+            font-size: 1rem; padding: 0.85rem 2rem; border-radius: 50px;
+            background: #eaf1fb; color: #1e3e5c; cursor: pointer;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+            display: inline-flex; align-items: center; gap: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+        .btn-primary {
+            background: #0a1e2f; color: white;
+            box-shadow: 0 10px 18px -8px rgba(10, 30, 47, 0.4);
+        }
+        .btn-primary:hover {
+            background: #1a3147; transform: translateY(-1px);
+            box-shadow: 0 14px 22px -8px rgba(10, 30, 47, 0.5);
+        }
+        .btn-secondary:hover {
+            background: #dae7f5; transform: translateY(-1px);
+        }
+        .btn:active { transform: translateY(1px); }
+        .feedback-message {
+            margin-top: 1.25rem; padding: 1rem 1.5rem;
+            border-radius: 20px; font-weight: 500;
+            background: #eef6ee; color: #1e5a2b;
+            border-left: 6px solid #27ae60; display: none;
+            align-items: flex-start; gap: 10px; line-height: 1.55;
+        }
+        .feedback-message.show { display: flex; }
+        .feedback-message.error {
+            background: #fef0f0; color: #9b2c2c; border-left-color: #e53e3e;
+        }
+        .feedback-message.warning {
+            background: #fff8e6; color: #8a6100; border-left-color: #f0b400;
+        }
+        .feedback-message i {
+            font-style: normal; font-size: 1.3rem;
+            flex-shrink: 0; margin-top: 0.1rem;
+        }
+        .reset-row { display: flex; justify-content: flex-end; margin-top: 0.5rem; }
+        .btn-reset {
+            background: transparent; color: #5b7c9b;
+            padding: 0.6rem 1.5rem; font-weight: 500;
+            box-shadow: none; border: 1px solid #cbdbe9;
+        }
+        .btn-reset:hover {
+            background: #f0f6fd; color: #0a1e2f; border-color: #9ac2e7;
+        }
+
+        .footnote {
+            font-size: 0.85rem; color: #5f7d9c; margin-top: 1.5rem;
+            text-align: center; border-top: 1px solid #d9e6f2; padding-top: 1.2rem;
+        }
+        .footnote strong { color: #1d4ed8; }
+
+        /* ---------- Module 3 specific ---------- */
+        .m3-subsection {
+            background: #ffffff; border: 1px solid #d6e5f2;
+            border-radius: 24px; padding: 1.5rem 1.75rem 1.75rem;
+            margin-bottom: 1.75rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+        }
+        .m3-subsection h3 {
+            font-size: 1.1rem; font-weight: 800; color: #0a1e2f;
+            margin-bottom: 0.4rem; display: flex; align-items: center; gap: 10px;
+        }
+        .m3-subsection h3 .step-pill {
+            background: #eaf1fb; color: #1d4ed8; font-size: 0.68rem;
+            font-weight: 700; padding: 0.2rem 0.65rem; border-radius: 30px;
+            text-transform: uppercase; letter-spacing: 0.4px;
+        }
+        .m3-subsection .m3-desc {
+            font-size: 0.9rem; color: #4e6d8c; margin-bottom: 1rem;
+            line-height: 1.55;
+        }
+
+        .task-list {
+            list-style: none; padding: 0; margin: 0.5rem 0 1rem 0;
+            display: flex; flex-direction: column; gap: 0.5rem;
+        }
+        .task-list li {
+            display: flex; gap: 10px; align-items: flex-start;
+            font-size: 0.9rem; color: #1e3a5c; line-height: 1.5;
+        }
+        .task-list li .task-num {
+            background: #3b82f6; color: white; font-size: 0.7rem;
+            font-weight: 700; width: 20px; height: 20px; border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            flex-shrink: 0; margin-top: 0.15rem;
+        }
+
+        .expected-box {
+            background: #f0faf3; border: 1px solid #b7e4c7;
+            border-radius: 16px; padding: 1rem 1.25rem;
+            font-size: 0.9rem; color: #1e5a2b; line-height: 1.6;
+            margin-top: 1rem;
+        }
+        .expected-box .exp-label {
+            font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.5px; color: #2f855a; display: block;
+            margin-bottom: 0.45rem;
+        }
+        .expected-box ul {
+            margin: 0.4rem 0 0 0; padding-left: 1.2rem;
+        }
+        .expected-box ul li { margin-bottom: 0.25rem; }
+        .expected-box strong { color: #14532d; }
+
+        /* before/after table */
+        .before-after {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
+            margin-top: 1rem;
+        }
+        .ba-col h4 {
+            font-size: 0.8rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.5px; margin-bottom: 0.6rem;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .ba-col.before h4 { color: #a83232; }
+        .ba-col.after h4 { color: #1e6b34; }
+        .ba-col .dataset-container { margin-bottom: 0; }
+        .ba-col table { font-size: 0.8rem; }
+        .ba-col th { font-size: 0.68rem; padding: 0.6rem 0.7rem; }
+        .ba-col td { padding: 0.55rem 0.7rem; }
+        .ba-col .cell-messy {
+            background: #fef5f5; color: #9b2c2c;
+            font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+            font-size: 0.78rem;
+        }
+        .ba-col .cell-clean {
+            background: #f0faf3; color: #14532d;
+            font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+            font-size: 0.78rem; font-weight: 600;
+        }
+
+        .pivot-preview {
+            background: #ffffff; border: 1px solid #d6e5f2;
+            border-radius: 16px; overflow: hidden; margin-top: 1rem;
+        }
+        .pivot-preview table th {
+            background: #eaf1fb; color: #1d4ed8;
+            font-size: 0.7rem; padding: 0.6rem 0.75rem;
+        }
+        .pivot-preview table td {
+            font-size: 0.82rem; padding: 0.55rem 0.75rem;
+            font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+        }
+        .pivot-preview .pivot-total {
+            background: #f8fbfe; font-weight: 800; color: #0a1e2f;
+        }
+        .pivot-preview .filter-pill {
+            display: inline-block; background: #fff8e6; color: #8a6100;
+            font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.75rem;
+            border-radius: 30px; margin: 0.75rem 1rem 0.25rem;
+            border: 1px solid #f0d9a0;
+        }
+        .pivot-preview .slicer-pill {
+            display: inline-block; background: #eaf1fb; color: #1d4ed8;
+            font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.75rem;
+            border-radius: 30px; margin: 0.25rem 0.35rem 0.25rem 1rem;
+            border: 1px solid #cfe2f5;
+        }
+
+        @media (max-width: 750px) {
+            .source-columns { grid-template-columns: 1fr; }
+            .crisp-step { grid-template-columns: 1fr; }
+            .crisp-step .step-visual { flex-direction: row; justify-content: flex-start; gap: 1rem; }
+            .before-after { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .card { padding: 1.25rem; }
+            .options-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 1.4rem; }
+            h2.section-title { font-size: 1.2rem; }
+            .concepts-grid { grid-template-columns: 1fr; }
+            .best-sources-grid { grid-template-columns: 1fr; }
+            .tab-btn { font-size: 0.78rem; padding: 0.7rem 0.5rem; }
+            .tab-btn .tab-num { display: none; }
+            .module-pip { width: 26px; height: 26px; font-size: 0.65rem; }
+            .module-tracker .tracker-label { display: none; }
+            .sample-methods { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- ====================== APP HEADER ====================== -->
+        <header class="app-header">
+            <h1>
+                <span class="logo-dot">📈</span>
+                <span class="brand-name">Narissa's Data Analytics Course</span>
+            </h1>
+            <p>Interactive exercises · 15-module track</p>
+        </header>
+
+        <!-- ====================== MODULE TRACKER ====================== -->
+        <div class="module-tracker" aria-label="Module progress tracker">
+            <span class="tracker-label">Modules</span>
+            <span class="module-pip available active">1<span class="pip-tooltip">Intro to Data Analytics</span></span>
+            <span class="module-pip available">2<span class="pip-tooltip">Data Type &amp; Source</span></span>
+            <span class="module-pip available">3<span class="pip-tooltip">Excel &amp; Google Sheets Mastery</span></span>
+            <span class="module-pip upcoming">4<span class="pip-tooltip">Coming soon</span></span>
+            <span class="module-pip upcoming">5<span class="pip-tooltip">Coming soon</span></span>
+            <span class="module-pip upcoming">6<span class="pip-tooltip">Coming soon</span></span>
+            <span class="module-pip upcoming">7<span class="pip-tooltip">Coming soon</span></span>
+            <span class="module-pip upcoming">8<span class="pip-tooltip">Coming soon</span></span>
+            <span class="module-pip upcoming">9<span class="pip-tooltip">Coming soon</span></span>
+            <span class="module-pip upcoming">10<span class="pip-tooltip">Coming soon</span></span>
+            <span class="module-pip upcoming">11<span class="pip-tooltip">Coming soon</span></span>
+            <span class="module-pip upcoming">12<span class="pip-tooltip">Coming soon</span></span>
+            <span class="module-pip upcoming">13<span class="pip-tooltip">Coming soon</span></span>
+            <span class="module-pip upcoming">14<span class="pip-tooltip">Coming soon</span></span>
+            <span class="module-pip upcoming">15<span class="pip-tooltip">Coming soon</span></span>
+            <span class="tracker-progress">3 / 15</span>
+        </div>
+
+        <!-- ====================== TAB BAR ====================== -->
+        <div class="tab-bar" role="tablist">
+            <button class="tab-btn" id="tab-module1" role="tab" aria-selected="false" aria-controls="panel-module1" data-target="panel-module1">
+                <span class="tab-icon">🧭</span>
+                Module 1 · Intro
+                <span class="tab-num">M1</span>
+            </button>
+            <button class="tab-btn" id="tab-module2" role="tab" aria-selected="false" aria-controls="panel-module2" data-target="panel-module2">
+                <span class="tab-icon">📊</span>
+                Module 2 · Data Type
+                <span class="tab-num">M2</span>
+            </button>
+            <button class="tab-btn active" id="tab-module3" role="tab" aria-selected="true" aria-controls="panel-module3" data-target="panel-module3">
+                <span class="tab-icon">📗</span>
+                Module 3 · Excel &amp; Sheets
+                <span class="tab-num">M3</span>
+            </button>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- ====================== MODULE 1 PANEL ====================== -->
+        <!-- ============================================================ -->
+        <div class="tab-panel" id="panel-module1" role="tabpanel" aria-labelledby="tab-module1">
+            <div class="card">
+                <div class="subhead">
+                    <strong>Module 1 — Intro to Data Analytics</strong> · Learn to classify business questions and see how a project is structured using the CRISP-DM lifecycle.
+                </div>
+
+                <!-- ============ PART 1: CLASSIFY THE QUESTIONS ============ -->
+                <h2 class="section-title">
+                    🧩 Part 1 · Classify the Questions
+                    <span class="section-badge">exercise</span>
+                </h2>
+
+                <div class="exercise-intro">
+                    <i>💡</i>
+                    <span>
+                        <strong>How to use this exercise:</strong> For each business question, click the method you think fits best.
+                        Then click <strong>“Reveal model answer”</strong> to see the correct classification, the method that works best, and why.
+                        Use this as a practice guide — there’s no score here, just learning by comparing.
+                    </span>
+                </div>
+
+                <!-- Question 1 -->
+                <div class="ex-card">
+                    <div class="ex-question">
+                        <span class="q-mark">1</span>
+                        <span class="q-text">"What were our Q4 sales compared to last year?"</span>
+                    </div>
+                    <div class="sample-methods" data-answer="descriptive">
+                        <div class="method-chip" data-value="descriptive">
+                            <div class="method-name"><span class="dot dot-blue"></span> Descriptive</div>
+                            <div class="method-desc">Summarizes what happened. Uses totals, trends, comparisons.</div>
+                            <div class="method-answer">✅ <strong>Best fit.</strong> This question asks for a factual comparison of past sales — a classic descriptive analytics task.</div>
+                        </div>
+                        <div class="method-chip" data-value="diagnostic">
+                            <div class="method-name"><span class="dot dot-purple"></span> Diagnostic</div>
+                            <div class="method-desc">Explains why something happened. Uses drill-downs and root-cause analysis.</div>
+                        </div>
+                        <div class="method-chip" data-value="predictive">
+                            <div class="method-name"><span class="dot dot-amber"></span> Predictive</div>
+                            <div class="method-desc">Forecasts what is likely to happen. Uses models and probabilities.</div>
+                        </div>
+                        <div class="method-chip" data-value="prescriptive">
+                            <div class="method-name"><span class="dot dot-green"></span> Prescriptive</div>
+                            <div class="method-desc">Recommends what to do. Uses optimization and simulation.</div>
+                        </div>
+                    </div>
+                    <button class="reveal-btn" data-reveal="1">👁 Reveal model answer</button>
+                    <div class="model-answer-box" id="model-1">
+                        <span class="ma-label">Model answer</span>
+                        <div class="ma-title">📊 Descriptive Analytics</div>
+                        <div class="ma-body">
+                            <strong>Method:</strong> Compare Q4 sales to the same period last year using a bar chart or YoY variance table.<br>
+                            <strong>Why it works:</strong> The question asks “what were our sales” — a factual summary of historical data. No explanation or prediction is needed.<br>
+                            <strong>Typical tools:</strong> SUM/COUNT aggregations, pivot tables, line or bar charts.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="ex-card">
+                    <div class="ex-question">
+                        <span class="q-mark">2</span>
+                        <span class="q-text">"Why did website conversions drop last week?"</span>
+                    </div>
+                    <div class="sample-methods" data-answer="diagnostic">
+                        <div class="method-chip" data-value="descriptive">
+                            <div class="method-name"><span class="dot dot-blue"></span> Descriptive</div>
+                            <div class="method-desc">Summarizes what happened. Uses totals, trends, comparisons.</div>
+                        </div>
+                        <div class="method-chip" data-value="diagnostic">
+                            <div class="method-name"><span class="dot dot-purple"></span> Diagnostic</div>
+                            <div class="method-desc">Explains why something happened. Uses drill-downs and root-cause analysis.</div>
+                            <div class="method-answer">✅ <strong>Best fit.</strong> This question asks <em>why</em> a change happened — a classic diagnostic analytics task.</div>
+                        </div>
+                        <div class="method-chip" data-value="predictive">
+                            <div class="method-name"><span class="dot dot-amber"></span> Predictive</div>
+                            <div class="method-desc">Forecasts what is likely to happen. Uses models and probabilities.</div>
+                        </div>
+                        <div class="method-chip" data-value="prescriptive">
+                            <div class="method-name"><span class="dot dot-green"></span> Prescriptive</div>
+                            <div class="method-desc">Recommends what to do. Uses optimization and simulation.</div>
+                        </div>
+                    </div>
+                    <button class="reveal-btn" data-reveal="2">👁 Reveal model answer</button>
+                    <div class="model-answer-box" id="model-2">
+                        <span class="ma-label">Model answer</span>
+                        <div class="ma-title">🔍 Diagnostic Analytics</div>
+                        <div class="ma-body">
+                            <strong>Method:</strong> Segment conversion rate by traffic source, device, page, and time. Compare with the prior week to isolate what changed.<br>
+                            <strong>Why it works:</strong> The word “why” signals a cause-and-effect question. You need to drill into dimensions to find the driver.<br>
+                            <strong>Typical tools:</strong> Funnel analysis, cohort drill-downs, heatmaps, correlation checks.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="ex-card">
+                    <div class="ex-question">
+                        <span class="q-mark">3</span>
+                        <span class="q-text">"How many customers are likely to churn next month?"</span>
+                    </div>
+                    <div class="sample-methods" data-answer="predictive">
+                        <div class="method-chip" data-value="descriptive">
+                            <div class="method-name"><span class="dot dot-blue"></span> Descriptive</div>
+                            <div class="method-desc">Summarizes what happened. Uses totals, trends, comparisons.</div>
+                        </div>
+                        <div class="method-chip" data-value="diagnostic">
+                            <div class="method-name"><span class="dot dot-purple"></span> Diagnostic</div>
+                            <div class="method-desc">Explains why something happened. Uses drill-downs and root-cause analysis.</div>
+                        </div>
+                        <div class="method-chip" data-value="predictive">
+                            <div class="method-name"><span class="dot dot-amber"></span> Predictive</div>
+                            <div class="method-desc">Forecasts what is likely to happen. Uses models and probabilities.</div>
+                            <div class="method-answer">✅ <strong>Best fit.</strong> This question asks about a future outcome (“likely to churn next month”) — a classic predictive analytics task.</div>
+                        </div>
+                        <div class="method-chip" data-value="prescriptive">
+                            <div class="method-name"><span class="dot dot-green"></span> Prescriptive</div>
+                            <div class="method-desc">Recommends what to do. Uses optimization and simulation.</div>
+                        </div>
+                    </div>
+                    <button class="reveal-btn" data-reveal="3">👁 Reveal model answer</button>
+                    <div class="model-answer-box" id="model-3">
+                        <span class="ma-label">Model answer</span>
+                        <div class="ma-title">🔮 Predictive Analytics</div>
+                        <div class="ma-body">
+                            <strong>Method:</strong> Build a churn-risk model using features like tenure, usage frequency, support tickets, and payment history. Score each customer with a probability.<br>
+                            <strong>Why it works:</strong> The question forecasts a future event, so you need a probabilistic model rather than a simple summary.<br>
+                            <strong>Typical tools:</strong> Logistic regression, decision trees, random forests, gradient boosting.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="ex-card">
+                    <div class="ex-question">
+                        <span class="q-mark">4</span>
+                        <span class="q-text">"How should we adjust staffing to reduce wait times?"</span>
+                    </div>
+                    <div class="sample-methods" data-answer="prescriptive">
+                        <div class="method-chip" data-value="descriptive">
+                            <div class="method-name"><span class="dot dot-blue"></span> Descriptive</div>
+                            <div class="method-desc">Summarizes what happened. Uses totals, trends, comparisons.</div>
+                        </div>
+                        <div class="method-chip" data-value="diagnostic">
+                            <div class="method-name"><span class="dot dot-purple"></span> Diagnostic</div>
+                            <div class="method-desc">Explains why something happened. Uses drill-downs and root-cause analysis.</div>
+                        </div>
+                        <div class="method-chip" data-value="predictive">
+                            <div class="method-name"><span class="dot dot-amber"></span> Predictive</div>
+                            <div class="method-desc">Forecasts what is likely to happen. Uses models and probabilities.</div>
+                        </div>
+                        <div class="method-chip" data-value="prescriptive">
+                            <div class="method-name"><span class="dot dot-green"></span> Prescriptive</div>
+                            <div class="method-desc">Recommends what to do. Uses optimization and simulation.</div>
+                            <div class="method-answer">✅ <strong>Best fit.</strong> This question asks for an action recommendation (“how should we adjust”) — a classic prescriptive analytics task.</div>
+                        </div>
+                    </div>
+                    <button class="reveal-btn" data-reveal="4">👁 Reveal model answer</button>
+                    <div class="model-answer-box" id="model-4">
+                        <span class="ma-label">Model answer</span>
+                        <div class="ma-title">🎯 Prescriptive Analytics</div>
+                        <div class="ma-body">
+                            <strong>Method:</strong> Use queueing or simulation models to test different staffing scenarios (e.g., add 2 agents at peak hours) and find the schedule that minimizes wait time at the lowest cost.<br>
+                            <strong>Why it works:</strong> The word “should” signals a decision or optimization question — you need to recommend the best action.<br>
+                            <strong>Typical tools:</strong> Optimization, simulation, decision trees with action nodes.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============ PART 2: CRISP-DM MODEL SAMPLES ============ -->
+                <hr class="section-divider">
+                <h2 class="section-title">
+                    🗺️ Part 2 · CRISP-DM Model — Sample Phrases
+                    <span class="section-badge">reference</span>
+                </h2>
+
+                <div class="builder-intro">
+                    <div class="bi-title">🧠 What a strong CRISP-DM model looks like</div>
+                    Each phase below shows <strong>best practices</strong> and a <strong>worked sample phrase</strong> you can reference when you write your own. Use these as a model for what a clear, actionable output looks like at each step.
+                </div>
+
+                <div class="scenario-box">
+                    <div class="scenario-label">📌 Scenario</div>
+                    <p>
+                        A company wants to <strong>increase customer retention</strong>.
+                        Follow the six CRISP-DM phases below — each one shows best practice and a sample phrase you can model your own work on.
+                    </p>
+                </div>
+
+                <div class="crisp-flow" id="crispFlow">
+                    <!-- Phase 1 -->
+                    <div class="crisp-step" data-phase="business">
+                        <div class="step-visual">
+                            <div class="step-num-circle" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">🎯</div>
+                            <div class="step-mini-label">Phase 1</div>
+                        </div>
+                        <div class="step-body">
+                            <div class="step-head">
+                                <span class="step-title">Business Understanding</span>
+                                <span class="step-tag">Why are we doing this?</span>
+                            </div>
+                            <div class="mini-flow">
+                                <span class="mf-box">Goal</span>
+                                <span class="mf-arrow">→</span>
+                                <span class="mf-box">KPI</span>
+                                <span class="mf-arrow">→</span>
+                                <span class="mf-box">Decision</span>
+                            </div>
+                            <div class="best-practice">
+                                <span class="bp-label">📐 Best practice — how to write a goal, KPI & decision</span>
+                                <ul>
+                                    <li><strong>Goal</strong> — start with a verb + outcome + scope. Make it specific and time-bound. <em>Bad:</em> “improve retention.” <em>Good:</em> “reduce monthly churn by 3 points in 2 quarters.”</li>
+                                    <li><strong>KPI</strong> — pick one primary metric that is measurable, owned, and moves with the goal. Add a target. <code>Retention rate = active users at end of month ÷ users at start</code></li>
+                                    <li><strong>Decision</strong> — state the action the analysis must unlock. Who will do what differently? If no decision changes, the analysis has no business value.</li>
+                                </ul>
+                            </div>
+                            <div class="sample-phrases">
+                                <span class="sp-label">✅ Sample phrases — retention scenario</span>
+                                <div class="sp-row">
+                                    <span class="sp-key">Goal</span>
+                                    <span class="sp-val">“Reduce monthly churn by <strong>3 percentage points</strong> over the next <strong>two quarters</strong>.”</span>
+                                </div>
+                                <div class="sp-row">
+                                    <span class="sp-key">KPI</span>
+                                    <span class="sp-val">“<strong>Retention rate</strong> — % of subscribers active at end of month. Target: <em>≥ 92%</em>.”</span>
+                                </div>
+                                <div class="sp-row">
+                                    <span class="sp-key">Decision</span>
+                                    <span class="sp-val">“<strong>Which customer segments</strong> to target with <strong>which retention offers</strong>.”</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 2 -->
+                    <div class="crisp-step" data-phase="data-understanding">
+                        <div class="step-visual">
+                            <div class="step-num-circle" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">🔍</div>
+                            <div class="step-mini-label">Phase 2</div>
+                        </div>
+                        <div class="step-body">
+                            <div class="step-head">
+                                <span class="step-title">Data Understanding</span>
+                                <span class="step-tag">What data do we need?</span>
+                            </div>
+                            <div class="mini-flow">
+                                <span class="mf-box">Identify sources</span>
+                                <span class="mf-arrow">→</span>
+                                <span class="mf-box">Check quality</span>
+                                <span class="mf-arrow">→</span>
+                                <span class="mf-box">Explore signals</span>
+                            </div>
+                            <div class="best-practice">
+                                <span class="bp-label">📐 Best practice — mapping data to the goal</span>
+                                <ul>
+                                    <li>For each KPI, ask: <em>which datasets tell me about this?</em> List the sources by name (e.g., subscription DB, usage logs, cancellation table).</li>
+                                    <li>Check <strong>coverage</strong> (does it include all customers?), <strong>granularity</strong> (per user? per day?), and <strong>freshness</strong> (how old?).</li>
+                                    <li>Flag any <strong>gaps or quality risks</strong> now — they become prep tasks in Phase 3.</li>
+                                </ul>
+                            </div>
+                            <div class="sample-phrases">
+                                <span class="sp-label">✅ Sample phrases — retention scenario</span>
+                                <div class="sp-row">
+                                    <span class="sp-key">Sources</span>
+                                    <span class="sp-val">“<strong>Subscription data</strong>, <strong>usage activity logs</strong>, <strong>cancellations list</strong>.”</span>
+                                </div>
+                                <div class="sp-row">
+                                    <span class="sp-key">Coverage</span>
+                                    <span class="sp-val">“All active + churned subscribers over the <strong>last 12 months</strong>.”</span>
+                                </div>
+                                <div class="sp-row">
+                                    <span class="sp-key">Risks</span>
+                                    <span class="sp-val">“Usage logs may have gaps; cancellations list may be <em>incomplete for involuntary churn</em>.”</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 3 -->
+                    <div class="crisp-step" data-phase="data-prep">
+                        <div class="step-visual">
+                            <div class="step-num-circle" style="background: linear-gradient(135deg, #f59e0b, #d97706);">🧹</div>
+                            <div class="step-mini-label">Phase 3</div>
+                        </div>
+                        <div class="step-body">
+                            <div class="step-head">
+                                <span class="step-title">Data Preparation</span>
+                                <span class="step-tag">Clean &amp; shape the data</span>
+                            </div>
+                            <div class="mini-flow">
+                                <span class="mf-box">Clean</span>
+                                <span class="mf-arrow">→</span>
+                                <span class="mf-box">De-duplicate</span>
+                                <span class="mf-arrow">→</span>
+                                <span class="mf-box">Define target</span>
+                            </div>
+                            <div class="best-practice">
+                                <span class="bp-label">📐 Best practice — preparing data for modeling</span>
+                                <ul>
+                                    <li><strong>Clean</strong> — fix date formats, unify time zones, handle missing values with a documented rule (not silently).</li>
+                                    <li><strong>De-duplicate</strong> — one row per customer per period. Decide the rule for merging duplicates.</li>
+                                    <li><strong>Define the target</strong> — make “churn” explicit: <em>no activity for 30 days</em>? <em>cancellation event</em>? Document the definition so it’s reproducible.</li>
+                                    <li><strong>Feature engineering</strong> — create signals like tenure, days since last login, support tickets per month.</li>
+                                </ul>
+                            </div>
+                            <div class="sample-phrases">
+                                <span class="sp-label">✅ Sample phrases — retention scenario</span>
+                                <div class="sp-row">
+                                    <span class="sp-key">Cleaning</span>
+                                    <span class="sp-val">“<strong>Standardize dates</strong>, <strong>remove duplicate</strong> subscription rows.”</span>
+                                </div>
+                                <div class="sp-row">
+                                    <span class="sp-key">Target</span>
+                                    <span class="sp-val">“Churn event = <em>cancellation</em> OR <em>30 days of zero activity</em>.”</span>
+                                </div>
+                                <div class="sp-row">
+                                    <span class="sp-key">Features</span>
+                                    <span class="sp-val">“<strong>Tenure</strong>, <strong>monthly logins</strong>, <strong>avg session length</strong>, <strong>support tickets</strong>, <strong>plan tier</strong>.”</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 4 -->
+                    <div class="crisp-step" data-phase="modeling">
+                        <div class="step-visual">
+                            <div class="step-num-circle" style="background: linear-gradient(135deg, #10b981, #047857);">🧠</div>
+                            <div class="step-mini-label">Phase 4</div>
+                        </div>
+                        <div class="step-body">
+                            <div class="step-head">
+                                <span class="step-title">Modeling</span>
+                                <span class="step-tag">Find the patterns</span>
+                            </div>
+                            <div class="mini-flow">
+                                <span class="mf-box">Segment</span>
+                                <span class="mf-arrow">→</span>
+                                <span class="mf-box">Find drivers</span>
+                                <span class="mf-arrow">→</span>
+                                <span class="mf-box">Score risk</span>
+                            </div>
+                            <div class="best-practice">
+                                <span class="bp-label">📐 Best practice — modeling choices</span>
+                                <ul>
+                                    <li><strong>Start simple.</strong> A logistic regression or decision tree is often enough to identify churn drivers — and it’s explainable to stakeholders.</li>
+                                    <li><strong>Segment first.</strong> Group customers by behavior (power users, casual, at-risk) before modeling — segments make results actionable.</li>
+                                    <li><strong>Balance interpretability and accuracy.</strong> If you use a complex model, pair it with SHAP or feature importance so the business can act on it.</li>
+                                    <li><strong>Always output a score.</strong> A churn probability per customer is what turns analysis into an action.</li>
+                                </ul>
+                            </div>
+                            <div class="sample-phrases">
+                                <span class="sp-label">✅ Sample phrases — retention scenario</span>
+                                <div class="sp-row">
+                                    <span class="sp-key">Technique</span>
+                                    <span class="sp-val">“<strong>Logistic regression</strong> + <strong>decision tree</strong> for explainability.”</span>
+                                </div>
+                                <div class="sp-row">
+                                    <span class="sp-key">Segments</span>
+                                    <span class="sp-val">“<strong>Power users</strong>, <strong>casual users</strong>, <strong>dormant-at-risk</strong>.”</span>
+                                </div>
+                                <div class="sp-row">
+                                    <span class="sp-key">Output</span>
+                                    <span class="sp-val">“<strong>Churn-risk score</strong> (0–1) per customer.”</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 5 -->
+                    <div class="crisp-step" data-phase="evaluation">
+                        <div class="step-visual">
+                            <div class="step-num-circle" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">📏</div>
+                            <div class="step-mini-label">Phase 5</div>
+                        </div>
+                        <div class="step-body">
+                            <div class="step-head">
+                                <span class="step-title">Evaluation</span>
+                                <span class="step-tag">Does it hold up?</span>
+                            </div>
+                            <div class="mini-flow">
+                                <span class="mf-box">Validate</span>
+                                <span class="mf-arrow">→</span>
+                                <span class="mf-box">Check metrics</span>
+                                <span class="mf-arrow">→</span>
+                                <span class="mf-box">Stakeholder review</span>
+                            </div>
+                            <div class="best-practice">
+                                <span class="bp-label">📐 Best practice — evaluating before deploying</span>
+                                <ul>
+                                    <li><strong>Technical checks</strong> — accuracy, precision/recall, AUC. Choose metrics that match the business cost of errors.</li>
+                                    <li><strong>Business checks</strong> — do the segments make sense? Would acting on them realistically move the KPI?</li>
+                                    <li><strong>Stakeholder validation</strong> — walk through the results with the retention team. If they don’t trust it, it won’t be used.</li>
+                                    <li><strong>Document limitations</strong> — what the model does <em>not</em> capture (e.g., external churn reasons).</li>
+                                </ul>
+                            </div>
+                            <div class="sample-phrases">
+                                <span class="sp-label">✅ Sample phrases — retention scenario</span>
+                                <div class="sp-row">
+                                    <span class="sp-key">Technical</span>
+                                    <span class="sp-val">“<strong>AUC 0.82</strong>, <strong>precision 0.74</strong> on holdout set.”</span>
+                                </div>
+                                <div class="sp-row">
+                                    <span class="sp-key">Business</span>
+                                    <span class="sp-val">“Top <strong>20% risk segment</strong> matches known at-risk accounts.”</span>
+                                </div>
+                                <div class="sp-row">
+                                    <span class="sp-key">Sign-off</span>
+                                    <span class="sp-val">“<strong>Retention team confirms</strong> segments are actionable.”</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 6 -->
+                    <div class="crisp-step" data-phase="deployment">
+                        <div class="step-visual">
+                            <div class="step-num-circle" style="background: linear-gradient(135deg, #0a1e2f, #1d4ed8);">🚀</div>
+                            <div class="step-mini-label">Phase 6</div>
+                        </div>
+                        <div class="step-body">
+                            <div class="step-head">
+                                <span class="step-title">Deployment</span>
+                                <span class="step-tag">Put it to work</span>
+                            </div>
+                            <div class="mini-flow">
+                                <span class="mf-box">Dashboard</span>
+                                <span class="mf-arrow">+</span>
+                                <span class="mf-box">Action plan</span>
+                                <span class="mf-arrow">+</span>
+                                <span class="mf-box">Monitor</span>
+                            </div>
+                            <div class="best-practice">
+                                <span class="bp-label">📐 Best practice — deploying &amp; monitoring</span>
+                                <ul>
+                                    <li><strong>Deliver to the decision-maker.</strong> A monthly churn dashboard beats a one-off report — it keeps the KPI visible.</li>
+                                    <li><strong>Pair insight with action.</strong> Every score or segment should link to a specific play (e.g., “at-risk → send win-back offer”).</li>
+                                    <li><strong>Monitor drift.</strong> Track model accuracy monthly — customer behavior changes and models decay.</li>
+                                    <li><strong>Close the loop.</strong> Measure whether the retention offers actually improved the KPI, and feed that back into the model.</li>
+                                </ul>
+                            </div>
+                            <div class="sample-phrases">
+                                <span class="sp-label">✅ Sample phrases — retention scenario</span>
+                                <div class="sp-row">
+                                    <span class="sp-key">Deliverable</span>
+                                    <span class="sp-val">“<strong>Monthly churn-risk dashboard</strong> + segment-level retention action plan.”</span>
+                                </div>
+                                <div class="sp-row">
+                                    <span class="sp-key">Action</span>
+                                    <span class="sp-val">“At-risk segment → <strong>automated win-back offer</strong>.”</span>
+                                </div>
+                                <div class="sp-row">
+                                    <span class="sp-key">Monitoring</span>
+                                    <span class="sp-val">“<strong>Monthly model refresh</strong> + KPI tracking.”</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-secondary" id="resetModule1Btn" type="button">↻ Reset exercise</button>
+                </div>
+
+                <hr>
+                <div class="footnote">
+                    ⚡ <strong>Narissa's Data Analytics Course</strong> · Module 1 of 15 · Exercise — classify business questions &amp; review a CRISP-DM model.
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- ====================== MODULE 2 PANEL ====================== -->
+        <!-- ============================================================ -->
+        <div class="tab-panel" id="panel-module2" role="tabpanel" aria-labelledby="tab-module2">
+            <div class="card">
+                <div class="subhead">
+                    <strong>Module 2 — Data Type &amp; Source</strong> · Classify a sample dataset, then choose the right data sources for a real business scenario.
+                </div>
+
+                <div class="concepts-panel">
+                    <h3>📖 Key concepts reference</h3>
+                    <div class="concepts-grid">
+                        <div class="concept-group">
+                            <h4>Structure</h4>
+                            <ul class="concept-list">
+                                <li><strong>Structured:</strong> <span class="arrow">→</span> Tables with rows/columns</li>
+                                <li><strong>Semi-structured:</strong> <span class="arrow">→</span> JSON, logs</li>
+                                <li><strong>Unstructured:</strong> <span class="arrow">→</span> Text, images</li>
+                            </ul>
+                        </div>
+                        <div class="concept-group">
+                            <h4>Data type</h4>
+                            <ul class="concept-list">
+                                <li><strong>Qualitative:</strong> <span class="arrow">→</span> Text labels/categories</li>
+                                <li><strong>Quantitative:</strong> <span class="arrow">→</span> Numbers, KPIs</li>
+                            </ul>
+                        </div>
+                        <div class="concept-group">
+                            <h4>Temporal classification</h4>
+                            <ul class="concept-list">
+                                <li><strong>Cross-sectional:</strong> <span class="arrow">→</span> One-time snapshot</li>
+                                <li><strong>Time series:</strong> <span class="arrow">→</span> Repeated over time</li>
+                                <li><strong>Panel:</strong> <span class="arrow">→</span> Same entities tracked over time</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section-title">
+                    🧩 Part 1 · Classify This Dataset
+                    <span class="section-badge">exercise</span>
+                </h2>
+
+                <div class="exercise-intro">
+                    <i>💡</i>
+                    <span>
+                        <strong>How to use this exercise:</strong> Read each column in the sample dataset below, then click the option card that matches best.
+                        When you click <strong>“Check answers”</strong>, the correct cards will glow green so you can see how your thinking compares.
+                    </span>
+                </div>
+
+                <div class="dataset-container">
+                    <div class="table-header">
+                        <span>📁 sample_survey.csv</span>
+                        <span class="badge">10 records · 6 attributes</span>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>respondent_id</th>
+                                <th>age</th>
+                                <th>income_bracket</th>
+                                <th>satisfaction_rating</th>
+                                <th>comments</th>
+                                <th>survey_month</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>R001</td><td>34</td><td>45k–60k</td><td>4</td><td>"Great service, will come back"</td><td>2024-03</td></tr>
+                            <tr><td>R002</td><td>28</td><td>30k–45k</td><td>3</td><td>"Average experience"</td><td>2024-03</td></tr>
+                            <tr><td>R003</td><td>52</td><td>75k–90k</td><td>5</td><td>"Excellent staff and fast delivery"</td><td>2024-04</td></tr>
+                            <tr><td>R004</td><td>41</td><td>60k–75k</td><td>4</td><td>"Good, but wait time was long"</td><td>2024-04</td></tr>
+                            <tr><td>R005</td><td>23</td><td>15k–30k</td><td>2</td><td>"Not satisfied with product quality"</td><td>2024-05</td></tr>
+                            <tr><td>R006</td><td>37</td><td>45k–60k</td><td>4</td><td>"Will recommend to friends"</td><td>2024-05</td></tr>
+                            <tr><td>R007</td><td>45</td><td>90k–120k</td><td>5</td><td>"Very professional and helpful"</td><td>2024-06</td></tr>
+                            <tr><td>R008</td><td>31</td><td>30k–45k</td><td>3</td><td>"Okay for the price"</td><td>2024-06</td></tr>
+                            <tr><td>R009</td><td>29</td><td>45k–60k</td><td>4</td><td>"Quick response from support"</td><td>2024-07</td></tr>
+                            <tr><td>R010</td><td>58</td><td>60k–75k</td><td>5</td><td>"Fantastic, no complaints"</td><td>2024-07</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="highlight-note">
+                        <i>🔍</i> Note: The dataset contains both numerical ratings and free‑text comments, collected across several months.
+                    </div>
+                </div>
+
+                <div class="question-block" id="q1-block">
+                    <div class="question-label">
+                        <span class="num">1</span>
+                        Which structure best matches this dataset?
+                    </div>
+                    <div class="options-grid" id="q1-options">
+                        <div class="option-card" data-q="structure" data-value="structured">
+                            <div class="option-header">
+                                <input type="radio" name="structure" id="struct-structured" value="structured">
+                                <label for="struct-structured" class="option-title">Structured</label>
+                            </div>
+                            <div class="sample-box">
+                                <span class="sample-label">📋 Sample structured data</span>
+                                <span class="example-row">id | name  | age | city</span>
+                                <span class="example-row">1  | Alice | 30  | NYC</span>
+                                <span class="example-row">2  | Bob   | 25  | LA</span>
+                                <span class="muted">→ tables with rows/columns</span>
+                            </div>
+                        </div>
+                        <div class="option-card" data-q="structure" data-value="semi-structured">
+                            <div class="option-header">
+                                <input type="radio" name="structure" id="struct-semi" value="semi-structured">
+                                <label for="struct-semi" class="option-title">Semi-structured</label>
+                            </div>
+                            <div class="sample-box">
+                                <span class="sample-label">📋 Sample semi-structured data</span>
+                                <span class="example-row">{ "id": 101, "rating": 5, "comment": "Great!" }</span>
+                                <span class="example-row">2024-01-01 INFO user=alice action=login</span>
+                                <span class="muted">→ JSON, logs</span>
+                            </div>
+                        </div>
+                        <div class="option-card" data-q="structure" data-value="unstructured">
+                            <div class="option-header">
+                                <input type="radio" name="structure" id="struct-unstructured" value="unstructured">
+                                <label for="struct-unstructured" class="option-title">Unstructured</label>
+                            </div>
+                            <div class="sample-box">
+                                <span class="sample-label">📋 Sample unstructured data</span>
+                                <span class="example-row">"The product arrived late but quality was great."</span>
+                                <span class="example-row">📷 image.jpg</span>
+                                <span class="muted">→ text, images</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hint">
+                        💡 Compare the sample dataset (tabular with a free‑text column) to each sample above.
+                    </div>
+                </div>
+
+                <div class="question-block" id="q2-block">
+                    <div class="question-label">
+                        <span class="num">2</span>
+                        Which data type best describes this dataset?
+                    </div>
+                    <div class="options-grid" id="q2-options">
+                        <div class="option-card" data-q="dataType" data-value="qualitative">
+                            <div class="option-header">
+                                <input type="radio" name="dataType" id="type-qual" value="qualitative">
+                                <label for="type-qual" class="option-title">Qualitative</label>
+                            </div>
+                            <div class="sample-box">
+                                <span class="sample-label">📋 Sample qualitative data</span>
+                                <span class="example-row">feedback: "Excellent service"</span>
+                                <span class="example-row">color: "deep blue"</span>
+                                <span class="example-row">category: "high satisfaction"</span>
+                                <span class="muted">→ text labels/categories</span>
+                            </div>
+                        </div>
+                        <div class="option-card" data-q="dataType" data-value="quantitative">
+                            <div class="option-header">
+                                <input type="radio" name="dataType" id="type-quant" value="quantitative">
+                                <label for="type-quant" class="option-title">Quantitative</label>
+                            </div>
+                            <div class="sample-box">
+                                <span class="sample-label">📋 Sample quantitative data</span>
+                                <span class="example-row">height: 175 cm</span>
+                                <span class="example-row">temperature: 23.5 °C</span>
+                                <span class="example-row">sales: 1,240 units</span>
+                                <span class="muted">→ numbers, KPIs</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hint">
+                        💡 The dataset contains ratings (ordinal) and comments (text) — which category fits best?
+                    </div>
+                </div>
+
+                <div class="question-block" id="q3-block">
+                    <div class="question-label">
+                        <span class="num">3</span>
+                        Which temporal classification fits best?
+                    </div>
+                    <div class="options-grid" id="q3-options">
+                        <div class="option-card" data-q="temporal" data-value="cross-sectional">
+                            <div class="option-header">
+                                <input type="radio" name="temporal" id="temp-cross" value="cross-sectional">
+                                <label for="temp-cross" class="option-title">Cross-sectional</label>
+                            </div>
+                            <div class="sample-box">
+                                <span class="sample-label">📋 Sample cross-sectional</span>
+                                <span class="example-row">id | age | income (one time point)</span>
+                                <span class="example-row">1  | 34  | 55k</span>
+                                <span class="example-row">2  | 28  | 38k</span>
+                                <span class="muted">→ one-time snapshot</span>
+                            </div>
+                        </div>
+                        <div class="option-card" data-q="temporal" data-value="time series">
+                            <div class="option-header">
+                                <input type="radio" name="temporal" id="temp-timeseries" value="time series">
+                                <label for="temp-timeseries" class="option-title">Time series</label>
+                            </div>
+                            <div class="sample-box">
+                                <span class="sample-label">📋 Sample time series</span>
+                                <span class="example-row">date       | stock_price</span>
+                                <span class="example-row">2024-01-01 | 150.2</span>
+                                <span class="example-row">2024-01-02 | 152.8</span>
+                                <span class="muted">→ repeated over time</span>
+                            </div>
+                        </div>
+                        <div class="option-card" data-q="temporal" data-value="panel">
+                            <div class="option-header">
+                                <input type="radio" name="temporal" id="temp-panel" value="panel">
+                                <label for="temp-panel" class="option-title">Panel</label>
+                            </div>
+                            <div class="sample-box">
+                                <span class="sample-label">📋 Sample panel data</span>
+                                <span class="example-row">id | year | income</span>
+                                <span class="example-row">1  | 2022 | 50k</span>
+                                <span class="example-row">1  | 2023 | 54k</span>
+                                <span class="example-row">2  | 2022 | 38k</span>
+                                <span class="muted">→ same entities tracked over time</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hint">
+                        💡 Look at respondent IDs — are the same people measured repeatedly?
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-secondary" id="resetBtn" type="button">↻ Reset</button>
+                    <button class="btn btn-primary" id="submitBtn" type="button">✓ Check answers</button>
+                </div>
+
+                <div id="feedback" class="feedback-message">
+                    <i>✅</i> <span id="feedbackText">All answers are correct!</span>
+                </div>
+                <div class="reset-row">
+                    <button class="btn btn-reset" id="clearFeedbackBtn" type="button">clear feedback</button>
+                </div>
+
+                <hr class="section-divider">
+                <h2 class="section-title">
+                    🔎 Part 2 · Source Selection Challenge
+                    <span class="section-badge">scenario</span>
+                </h2>
+
+                <div class="scenario-box-m2">
+                    <div class="scenario-label">📌 Scenario</div>
+                    <p>
+                        A <strong>retail company</strong> wants to understand <strong>why refunds have increased</strong> over the past two quarters.
+                        The analytics team must decide which data sources to pull in.
+                        <br><br>
+                        <strong>Your task:</strong> Select the <strong>internal</strong> and <strong>external</strong> sources that would be most useful,
+                        then review why each source is reliable or risky.
+                    </p>
+                </div>
+
+                <div class="source-columns">
+                    <div class="source-column internal">
+                        <h3><span class="col-icon">🏢</span> Internal sources</h3>
+
+                        <div class="source-card" data-source="transaction-logs">
+                            <div class="source-header">
+                                <input type="checkbox" id="src-tx" value="transaction-logs">
+                                <label for="src-tx">Transaction logs</label>
+                            </div>
+                            <div class="source-desc">Refund records, purchase history, product SKUs, timestamps, payment methods, return reasons.</div>
+                            <span class="source-tag tag-reliable">Reliable · objective</span>
+                        </div>
+
+                        <div class="source-card" data-source="crm">
+                            <div class="source-header">
+                                <input type="checkbox" id="src-crm" value="crm">
+                                <label for="src-crm">CRM system</label>
+                            </div>
+                            <div class="source-desc">Customer profiles, loyalty tier, complaint history, prior returns, account notes.</div>
+                            <span class="source-tag tag-reliable">Reliable · structured</span>
+                        </div>
+
+                        <div class="source-card" data-source="support-tickets">
+                            <div class="source-header">
+                                <input type="checkbox" id="src-support" value="support-tickets">
+                                <label for="src-support">Support tickets</label>
+                            </div>
+                            <div class="source-desc">Free-text customer issues, agent notes, escalation reasons, resolution time.</div>
+                            <span class="source-tag tag-mixed">Mixed · rich but subjective</span>
+                        </div>
+                    </div>
+
+                    <div class="source-column external">
+                        <h3><span class="col-icon">🌐</span> External sources</h3>
+
+                        <div class="source-card" data-source="reviews">
+                            <div class="source-header">
+                                <input type="checkbox" id="src-reviews" value="reviews">
+                                <label for="src-reviews">Social media reviews</label>
+                            </div>
+                            <div class="source-desc">Star ratings and review text on social platforms, marketplaces, or own site.</div>
+                            <span class="source-tag tag-mixed">Mixed · public but biased</span>
+                        </div>
+
+                        <div class="source-card" data-source="third-party-reviews">
+                            <div class="source-header">
+                                <input type="checkbox" id="src-thirdparty" value="third-party-reviews">
+                                <label for="src-thirdparty">Third-party review sites</label>
+                            </div>
+                            <div class="source-desc">Reviews on platforms like Trustpilot, Yelp, or Google — themes in complaints and ratings.</div>
+                            <span class="source-tag tag-mixed">Mixed · aggregated themes</span>
+                        </div>
+
+                        <div class="source-card" data-source="social-sentiment">
+                            <div class="source-header">
+                                <input type="checkbox" id="src-social" value="social-sentiment">
+                                <label for="src-social">Social media sentiment</label>
+                            </div>
+                            <div class="source-desc">Posts, mentions, comments, hashtags related to brand, products, and refunds.</div>
+                            <span class="source-tag tag-risky">Risky · noisy &amp; unverified</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="best-sources-panel">
+                    <h4>🎯 Best sources for this scenario</h4>
+                    <div class="best-sources-grid">
+                        <div class="bs-group">
+                            <h5>Best internal sources</h5>
+                            <ul>
+                                <li><strong>Transaction logs</strong> <span class="arrow">→</span> refund timestamps, items, reasons</li>
+                                <li><strong>CRM</strong> <span class="arrow">→</span> customer segments, history</li>
+                                <li><strong>Support tickets</strong> <span class="arrow">→</span> complaints, patterns</li>
+                            </ul>
+                        </div>
+                        <div class="bs-group">
+                            <h5>External sources</h5>
+                            <ul>
+                                <li><strong>Social media reviews</strong> <span class="arrow">→</span> sentiment</li>
+                                <li><strong>Third-party review sites</strong> <span class="arrow">→</span> themes in complaints</li>
+                            </ul>
+                        </div>
+                        <div class="bs-group">
+                            <h5>Reliability notes</h5>
+                            <ul>
+                                <li><strong>Internal</strong> <span class="arrow">→</span> higher consistency</li>
+                                <li><strong>External</strong> <span class="arrow">→</span> helpful context but noisy</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reasoning-panel" id="reasoningPanel">
+                    <h4><span class="reason-icon">⚖️</span> Reliability &amp; risk notes — select sources above to update</h4>
+                    <div id="reasoningContent">
+                        <div class="reasoning-item">
+                            <span class="r-icon">💡</span>
+                            <span class="r-text">Select one or more sources to see why each is <span class="pro">reliable</span> or <span class="con">risky</span>.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-secondary" id="resetSourcesBtn" type="button">↻ Reset sources</button>
+                    <button class="btn btn-primary" id="checkSourcesBtn" type="button">✓ Check source choices</button>
+                </div>
+
+                <div id="sourceFeedback" class="feedback-message">
+                    <i>✅</i> <span id="sourceFeedbackText"></span>
+                </div>
+                <div class="reset-row">
+                    <button class="btn btn-reset" id="clearSourceFeedbackBtn" type="button">clear feedback</button>
+                </div>
+
+                <hr>
+                <div class="footnote">
+                    ⚡ <strong>Narissa's Data Analytics Course</strong> · Module 2 of 15 · Exercise — classify the dataset &amp; select the right sources.
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- ====================== MODULE 3 PANEL ====================== -->
+        <!-- ============================================================ -->
+        <div class="tab-panel active" id="panel-module3" role="tabpanel" aria-labelledby="tab-module3">
+            <div class="card">
+                <div class="subhead">
+                    <strong>Module 3 — Excel &amp; Google Sheets Mastery</strong> · Practice lookups, build pivot tables, and clean messy data with hands-on samples.
+                </div>
+
+                <!-- ============ PART 1: LOOKUP CHALLENGE ============ -->
+                <h2 class="section-title">
+                    🔍 Part 1 · Lookup Challenge (XLOOKUP / INDEX-MATCH)
+                    <span class="section-badge">exercise</span>
+                </h2>
+
+                <div class="exercise-intro">
+                    <i>💡</i>
+                    <span>
+                        <strong>How to use this exercise:</strong> Below you’ll find a <strong>SalesTbl</strong> and a <strong>CustomerTbl</strong>.
+                        Work through the tasks using <strong>XLOOKUP</strong> and <strong>INDEX + MATCH</strong>.
+                        Compare your results to the <strong>expected outputs</strong> shown after each task.
+                    </span>
+                </div>
+
+                <!-- SalesTbl -->
+                <div class="m3-subsection">
+                    <h3>📁 SalesTbl <span class="step-pill">source table</span></h3>
+                    <div class="m3-desc">Each row is a sale. Use <code>CustomerID</code> to look up details from the CustomerTbl.</div>
+                    <div class="dataset-container">
+                        <div class="table-header">
+                            <span>SalesTbl — 8 rows</span>
+                            <span class="badge">OrderID · CustomerID · Product · Sales</span>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>OrderID</th>
+                                    <th>CustomerID</th>
+                                    <th>Product</th>
+                                    <th>Sales</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>ORD-1001</td><td>C-201</td><td>Laptop</td><td>1,200</td></tr>
+                                <tr><td>ORD-1002</td><td>C-205</td><td>Monitor</td><td>320</td></tr>
+                                <tr><td>ORD-1003</td><td>C-203</td><td>Keyboard</td><td>85</td></tr>
+                                <tr><td>ORD-1004</td><td>C-201</td><td>Mouse</td><td>45</td></tr>
+                                <tr><td>ORD-1005</td><td>C-207</td><td>Laptop</td><td>1,350</td></tr>
+                                <tr><td>ORD-1006</td><td>C-209</td><td>Webcam</td><td>120</td></tr>
+                                <tr><td>ORD-1007</td><td>C-202</td><td>Monitor</td><td>410</td></tr>
+                                <tr><td>ORD-1008</td><td>C-999</td><td>Headset</td><td>150</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="highlight-note">
+                            <i>🔍</i> Note: <strong>C-999</strong> is intentionally missing from the CustomerTbl — it’s the test case for the “Unknown” fallback.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CustomerTbl -->
+                <div class="m3-subsection">
+                    <h3>📁 CustomerTbl <span class="step-pill">lookup table</span></h3>
+                    <div class="m3-desc">Maps <code>CustomerID</code> to a customer name, segment, and region.</div>
+                    <div class="dataset-container">
+                        <div class="table-header">
+                            <span>CustomerTbl — 7 rows</span>
+                            <span class="badge">CustomerID · CustomerName · Segment · Region</span>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>CustomerID</th>
+                                    <th>CustomerName</th>
+                                    <th>Segment</th>
+                                    <th>Region</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>C-201</td><td>Acme Corp</td><td>Enterprise</td><td>North</td></tr>
+                                <tr><td>C-202</td><td>BlueSky Ltd</td><td>SMB</td><td>South</td></tr>
+                                <tr><td>C-203</td><td>Cedar & Co</td><td>Startup</td><td>East</td></tr>
+                                <tr><td>C-204</td><td>Delta Works</td><td>Enterprise</td><td>West</td></tr>
+                                <tr><td>C-205</td><td>Echo Systems</td><td>SMB</td><td>North</td></tr>
+                                <tr><td>C-206</td><td>Foxtrot Inc</td><td>Startup</td><td>South</td></tr>
+                                <tr><td>C-207</td><td>Goldline LLC</td><td>Enterprise</td><td>East</td></tr>
+                                <tr><td>C-208</td><td>Helix Group</td><td>SMB</td><td>West</td></tr>
+                                <tr><td>C-209</td><td>Ionic Partners</td><td>Startup</td><td>North</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Task 1: XLOOKUP -->
+                <div class="m3-subsection">
+                    <h3>🟦 Task 1 · Fetch customer segment with XLOOKUP <span class="step-pill">syntax</span></h3>
+                    <div class="m3-desc">Use XLOOKUP to pull the <strong>Segment</strong> for each <code>CustomerID</code> in the SalesTbl.</div>
+
+                    <div class="formula-display">
+<span class="cmt">' XLOOKUP syntax in a new column on SalesTbl'</span>
+<span class="fn">=XLOOKUP</span>(<span class="arg">lookup_value</span>, <span class="arg">lookup_array</span>, <span class="arg">return_array</span>, <span class="arg">if_not_found</span>)
+
+<span class="cmt">' Row-by-row example (OrderID = ORD-1001)'</span>
+<span class="fn">=XLOOKUP</span>(<span class="arg">B2</span>, <span class="arg">CustomerTbl[CustomerID]</span>, <span class="arg">CustomerTbl[Segment]</span>, <span class="str">"Unknown"</span>)
+                    </div>
+
+                    <div class="expected-box">
+                        <span class="exp-label">✅ Expected output — Segment column</span>
+                        The lookup returns a segment for every valid CustomerID. Missing IDs fall back to “Unknown”.
+                    </div>
+
+                    <div class="result-table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>OrderID</th>
+                                    <th>CustomerID</th>
+                                    <th>Product</th>
+                                    <th>Sales</th>
+                                    <th>Segment (XLOOKUP)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>ORD-1001</td><td>C-201</td><td>Laptop</td><td>1,200</td><td class="cell-ok">Enterprise</td></tr>
+                                <tr><td>ORD-1002</td><td>C-205</td><td>Monitor</td><td>320</td><td class="cell-ok">SMB</td></tr>
+                                <tr><td>ORD-1003</td><td>C-203</td><td>Keyboard</td><td>85</td><td class="cell-ok">Startup</td></tr>
+                                <tr><td>ORD-1004</td><td>C-201</td><td>Mouse</td><td>45</td><td class="cell-ok">Enterprise</td></tr>
+                                <tr><td>ORD-1005</td><td>C-207</td><td>Laptop</td><td>1,350</td><td class="cell-ok">Enterprise</td></tr>
+                                <tr><td>ORD-1006</td><td>C-209</td><td>Webcam</td><td>120</td><td class="cell-ok">Startup</td></tr>
+                                <tr><td>ORD-1007</td><td>C-202</td><td>Monitor</td><td>410</td><td class="cell-ok">SMB</td></tr>
+                                <tr><td>ORD-1008</td><td>C-999</td><td>Headset</td><td>150</td><td class="cell-unknown">Unknown</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Task 2: Fallback -->
+                <div class="m3-subsection">
+                    <h3>🟨 Task 2 · Handle missing IDs with “Unknown” <span class="step-pill">error handling</span></h3>
+                    <div class="m3-desc">
+                        Without the 4th argument, XLOOKUP returns <code>#N/A</code> when an ID isn’t found. Adding <code>"Unknown"</code> as the <code>if_not_found</code> argument replaces the error with a clean label.
+                    </div>
+
+                    <div class="formula-display">
+<span class="cmt">' ❌ Without fallback — shows an error'</span>
+<span class="fn">=XLOOKUP</span>(<span class="arg">B9</span>, <span class="arg">CustomerTbl[CustomerID]</span>, <span class="arg">CustomerTbl[Segment]</span>)
+<span class="cmt">' → returns #N/A</span>
+
+<span class="cmt">' ✅ With fallback — shows "Unknown"'</span>
+<span class="fn">=XLOOKUP</span>(<span class="arg">B9</span>, <span class="arg">CustomerTbl[CustomerID]</span>, <span class="arg">CustomerTbl[Segment]</span>, <span class="str">"Unknown"</span>)
+<span class="cmt">' → returns "Unknown"</span>
+                    </div>
+
+                    <div class="expected-box">
+                        <span class="exp-label">✅ Expected output — fallback comparison</span>
+                        <ul>
+                            <li><strong>Valid matches:</strong> return the correct segment (Enterprise, SMB, Startup).</li>
+                            <li><strong>Missing IDs (e.g., C-999):</strong> return <strong>“Unknown”</strong> instead of <code>#N/A</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Task 3: INDEX + MATCH -->
+                <div class="m3-subsection">
+                    <h3>🟩 Task 3 · Repeat with INDEX + MATCH <span class="step-pill">compatibility</span></h3>
+                    <div class="m3-desc">
+                        INDEX + MATCH is the classic combo for older Excel versions or when you need maximum flexibility. Wrap it in <code>IFERROR</code> to get the “Unknown” fallback.
+                    </div>
+
+                    <div class="formula-display">
+<span class="cmt">' INDEX returns the value at a given position; MATCH finds that position'</span>
+<span class="fn">=INDEX</span>(<span class="arg">CustomerTbl[Segment]</span>, <span class="fn">MATCH</span>(<span class="arg">B2</span>, <span class="arg">CustomerTbl[CustomerID]</span>, <span class="num">0</span>))
+
+<span class="cmt">' Add IFERROR for the "Unknown" fallback'</span>
+<span class="fn">=IFERROR</span>(
+  <span class="fn">INDEX</span>(<span class="arg">CustomerTbl[Segment]</span>, <span class="fn">MATCH</span>(<span class="arg">B2</span>, <span class="arg">CustomerTbl[CustomerID]</span>, <span class="num">0</span>)),
+  <span class="str">"Unknown"</span>
+)
+                    </div>
+
+                    <div class="expected-box">
+                        <span class="exp-label">✅ Expected output — INDEX/MATCH mirrors XLOOKUP</span>
+                        The Segment column returns <strong>identical results</strong> to the XLOOKUP version. Missing IDs still return “Unknown”.
+                    </div>
+
+                    <div class="result-table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>OrderID</th>
+                                    <th>CustomerID</th>
+                                    <th>Segment (XLOOKUP)</th>
+                                    <th>Segment (INDEX/MATCH)</th>
+                                    <th>Match?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>ORD-1001</td><td>C-201</td><td class="cell-ok">Enterprise</td><td class="cell-ok">Enterprise</td><td class="cell-ok">✓</td></tr>
+                                <tr><td>ORD-1002</td><td>C-205</td><td class="cell-ok">SMB</td><td class="cell-ok">SMB</td><td class="cell-ok">✓</td></tr>
+                                <tr><td>ORD-1003</td><td>C-203</td><td class="cell-ok">Startup</td><td class="cell-ok">Startup</td><td class="cell-ok">✓</td></tr>
+                                <tr><td>ORD-1004</td><td>C-201</td><td class="cell-ok">Enterprise</td><td class="cell-ok">Enterprise</td><td class="cell-ok">✓</td></tr>
+                                <tr><td>ORD-1005</td><td>C-207</td><td class="cell-ok">Enterprise</td><td class="cell-ok">Enterprise</td><td class="cell-ok">✓</td></tr>
+                                <tr><td>ORD-1006</td><td>C-209</td><td class="cell-ok">Startup</td><td class="cell-ok">Startup</td><td class="cell-ok">✓</td></tr>
+                                <tr><td>ORD-1007</td><td>C-202</td><td class="cell-ok">SMB</td><td class="cell-ok">SMB</td><td class="cell-ok">✓</td></tr>
+                                <tr><td>ORD-1008</td><td>C-999</td><td class="cell-unknown">Unknown</td><td class="cell-unknown">Unknown</td><td class="cell-ok">✓</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ============ PART 2: PIVOTTABLE BUILD ============ -->
+                <hr class="section-divider">
+                <h2 class="section-title">
+                    📊 Part 2 · PivotTable Build
+                    <span class="section-badge">exercise</span>
+                </h2>
+
+                <div class="exercise-intro">
+                    <i>💡</i>
+                    <span>
+                        <strong>How to use this exercise:</strong> Follow the field placements below to build a pivot table from <strong>SalesTbl</strong>.
+                        Then compare your layout to the <strong>expected outcome</strong> sample.
+                    </span>
+                </div>
+
+                <div class="m3-subsection">
+                    <h3>🧱 SalesTbl — pivot source <span class="step-pill">input</span></h3>
+                    <div class="m3-desc">This is the same table used in Part 1 — now enriched with Month, Region, Profit, and Category columns for pivoting.</div>
+
+                    <div class="dataset-container">
+                        <div class="table-header">
+                            <span>SalesTbl — 12 rows</span>
+                            <span class="badge">Region · Month · Category · Sales · Profit</span>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Region</th>
+                                    <th>Month</th>
+                                    <th>Category</th>
+                                    <th>Sales</th>
+                                    <th>Profit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>North</td><td>Jan</td><td>Electronics</td><td>1,200</td><td>240</td></tr>
+                                <tr><td>North</td><td>Feb</td><td>Electronics</td><td>1,450</td><td>305</td></tr>
+                                <tr><td>North</td><td>Jan</td><td>Furniture</td><td>820</td><td>150</td></tr>
+                                <tr><td>South</td><td>Jan</td><td>Electronics</td><td>990</td><td>180</td></tr>
+                                <tr><td>South</td><td>Feb</td><td>Furniture</td><td>1,100</td><td>220</td></tr>
+                                <tr><td>South</td><td>Feb</td><td>Electronics</td><td>1,260</td><td>265</td></tr>
+                                <tr><td>East</td><td>Jan</td><td>Furniture</td><td>730</td><td>130</td></tr>
+                                <tr><td>East</td><td>Feb</td><td>Electronics</td><td>1,510</td><td>330</td></tr>
+                                <tr><td>East</td><td>Jan</td><td>Electronics</td><td>1,180</td><td>245</td></tr>
+                                <tr><td>West</td><td>Jan</td><td>Furniture</td><td>860</td><td>165</td></tr>
+                                <tr><td>West</td><td>Feb</td><td>Furniture</td><td>940</td><td>185</td></tr>
+                                <tr><td>West</td><td>Feb</td><td>Electronics</td><td>1,390</td><td>290</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="m3-subsection">
+                    <h3>⚙️ Field placement <span class="step-pill">build steps</span></h3>
+                    <div class="m3-desc">Drag the fields into the four pivot areas exactly as listed below.</div>
+
+                    <ul class="task-list">
+                        <li><span class="task-num">1</span><span><strong>Rows</strong> → <code>Region</code></span></li>
+                        <li><span class="task-num">2</span><span><strong>Columns</strong> → <code>Month</code></span></li>
+                        <li><span class="task-num">3</span><span><strong>Values</strong> → <code>Sum of Sales</code> and <code>Sum of Profit</code></span></li>
+                        <li><span class="task-num">4</span><span><strong>Filter</strong> → <code>Category</code> (add a slicer for interactivity)</span></li>
+                    </ul>
+
+                    <div class="expected-box">
+                        <span class="exp-label">✅ Expected outcome</span>
+                        A dynamic table showing <strong>performance by Region × Month</strong>, with Sales and Profit summed, plus a slicer to toggle Category.
+                    </div>
+                </div>
+
+                <div class="m3-subsection">
+                    <h3>📈 Sample pivot — Region × Month <span class="step-pill">result</span></h3>
+                    <div class="m3-desc">This is what the pivot should look like when all categories are included. Notice the totals row and column.</div>
+
+                    <div class="pivot-preview">
+                        <div style="padding: 0 0 0.25rem 0;">
+                            <span class="slicer-pill">🎛️ Slicer: Category = All</span>
+                            <span class="filter-pill">Filter: Category</span>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Region</th>
+                                    <th>Jan — Sales</th>
+                                    <th>Jan — Profit</th>
+                                    <th>Feb — Sales</th>
+                                    <th>Feb — Profit</th>
+                                    <th>Grand Total — Sales</th>
+                                    <th>Grand Total — Profit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>East</strong></td>
+                                    <td>1,180</td><td>245</td>
+                                    <td>1,510</td><td>330</td>
+                                    <td class="pivot-total">2,690</td><td class="pivot-total">575</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>North</strong></td>
+                                    <td>2,020</td><td>390</td>
+                                    <td>1,450</td><td>305</td>
+                                    <td class="pivot-total">3,470</td><td class="pivot-total">695</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>South</strong></td>
+                                    <td>990</td><td>180</td>
+                                    <td>2,360</td><td>485</td>
+                                    <td class="pivot-total">3,350</td><td class="pivot-total">665</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>West</strong></td>
+                                    <td>860</td><td>165</td>
+                                    <td>2,330</td><td>475</td>
+                                    <td class="pivot-total">3,190</td><td class="pivot-total">640</td>
+                                </tr>
+                                <tr>
+                                    <td class="pivot-total"><strong>Grand Total</strong></td>
+                                    <td class="pivot-total">5,050</td><td class="pivot-total">980</td>
+                                    <td class="pivot-total">7,650</td><td class="pivot-total">1,595</td>
+                                    <td class="pivot-total">12,700</td><td class="pivot-total">2,575</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="expected-box" style="margin-top:1rem;">
+                        <span class="exp-label">✅ What the pivot delivers</span>
+                        <ul>
+                            <li><strong>Row labels:</strong> Region (East, North, South, West)</li>
+                            <li><strong>Column labels:</strong> Month (Jan, Feb) with Sales &amp; Profit nested</li>
+                            <li><strong>Values:</strong> Sum of Sales + Sum of Profit</li>
+                            <li><strong>Filter / Slicer:</strong> Category (Electronics / Furniture) — drag the slicer to filter interactively</li>
+                            <li><strong>Grand totals:</strong> Auto-calculated for rows and columns</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ============ PART 3: DATA CLEANING DRILL ============ -->
+                <hr class="section-divider">
+                <h2 class="section-title">
+                    🧹 Part 3 · Data Cleaning Drill
+                    <span class="section-badge">exercise</span>
+                </h2>
+
+                <div class="exercise-intro">
+                    <i>💡</i>
+                    <span>
+                        <strong>How to use this exercise:</strong> The table below is <strong>messy</strong> — extra spaces, hidden characters, numbers stored as text, and dates formatted as strings.
+                        Follow the tasks and compare your cleaned output to the <strong>before / after</strong> sample.
+                    </span>
+                </div>
+
+                <!-- Messy data -->
+                <div class="m3-subsection">
+                    <h3>🗂️ Raw dataset — messy <span class="step-pill">before</span></h3>
+                    <div class="m3-desc">Each cell below has a data-quality issue that needs cleaning.</div>
+
+                    <div class="dataset-container">
+                        <div class="table-header">
+                            <span>messy_customers.csv — 6 rows</span>
+                            <span class="badge">Raw · uncleaned</span>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>CustomerID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Spend ($)</th>
+                                    <th>Signup Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="cell-messy">C-101 </td><td class="cell-messy">  Alice Wong  </td><td class="cell-messy">alice@acme.com</td><td class="cell-messy">"1,240"</td><td class="cell-messy">01/15/2024</td><td class="cell-messy">Active</td></tr>
+                                <tr><td class="cell-messy">C-102</td><td class="cell-messy">Bob  Lee</td><td class="cell-messy">bob@acme.com</td><td class="cell-messy">"980"</td><td class="cell-messy">2024-02-03</td><td class="cell-messy">Active</td></tr>
+                                <tr><td class="cell-messy">C-103 </td><td class="cell-messy">  Carol  Diaz </td><td class="cell-messy">carol@acme.com</td><td class="cell-messy">"1,455"</td><td class="cell-messy">03/22/24</td><td class="cell-messy">Inactive</td></tr>
+                                <tr><td class="cell-messy">C-104</td><td class="cell-messy">Dan  O’Brien</td><td class="cell-messy">dan@acme.com</td><td class="cell-messy">"725"</td><td class="cell-messy">2024-04-10</td><td class="cell-messy"></td></tr>
+                                <tr><td class="cell-messy">C-105</td><td class="cell-messy">Eve   Chen</td><td class="cell-messy">eve@acme.com</td><td class="cell-messy">"1,890"</td><td class="cell-messy">05/08/2024</td><td class="cell-messy">Active</td></tr>
+                                <tr><td class="cell-messy">C-106</td><td class="cell-messy">  Frank  Wu  </td><td class="cell-messy">frank@acme.com</td><td class="cell-messy">"1,100"</td><td class="cell-messy">6/30/24</td><td class="cell-messy">Active</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tasks -->
+                <div class="m3-subsection">
+                    <h3>🛠️ Cleaning tasks <span class="step-pill">step by step</span></h3>
+                    <div class="m3-desc">Apply each task to the column shown. Use the formulas as a reference.</div>
+
+                    <ul class="task-list">
+                        <li><span class="task-num">1</span><span><strong>Trim whitespace</strong> on <code>CustomerID</code> and <code>Name</code> using <code>TRIM</code>.</span></li>
+                        <li><span class="task-num">2</span><span><strong>Remove hidden characters</strong> from <code>Name</code> using <code>CLEAN</code> (combinable with TRIM).</span></li>
+                        <li><span class="task-num">3</span><span><strong>Convert Spend to numbers</strong> using <code>VALUE</code> (strips commas and quotation marks).</span></li>
+                        <li><span class="task-num">4</span><span><strong>Flag missing values</strong> in <code>Status</code> with <code>IF</code> → “Unknown”.</span></li>
+                        <li><span class="task-num">5</span><span><strong>Convert dates stored as text</strong> to real dates using <code>DATEVALUE</code> (or Text-to-Columns).</span></li>
+                    </ul>
+
+                    <div class="formula-display">
+<span class="cmt">' 1. Trim whitespace on Name'</span>
+<span class="fn">=TRIM</span>(<span class="arg">B2</span>)
+<span class="cmt">' "  Alice Wong  " → "Alice Wong"</span>
+
+<span class="cmt">' 2. Remove hidden characters + trim (nested)'</span>
+<span class="fn">=TRIM</span>(<span class="fn">CLEAN</span>(<span class="arg">B2</span>))
+
+<span class="cmt">' 3. Convert Spend (text) to number'</span>
+<span class="fn">=VALUE</span>(<span class="arg">D2</span>)
+<span class="cmt">' "1,240" → 1240</span>
+
+<span class="cmt">' 4. Flag missing Status'</span>
+<span class="fn">=IF</span>(<span class="arg">F2</span>=<span class="str">""</span>, <span class="str">"Unknown"</span>, <span class="arg">F2</span>)
+
+<span class="cmt">' 5. Convert text date to real date'</span>
+<span class="fn">=DATEVALUE</span>(<span class="arg">E2</span>)
+<span class="cmt">' "01/15/2024" → 2024-01-15 (real date)</span>
+                    </div>
+                </div>
+
+                <!-- Before / After -->
+                <div class="m3-subsection">
+                    <h3>✨ Before vs After <span class="step-pill">expected outcome</span></h3>
+                    <div class="m3-desc">Compare the messy input on the left with the analysis-ready output on the right.</div>
+
+                    <div class="before-after">
+                        <div class="ba-col before">
+                            <h4>❌ Before (messy)</h4>
+                            <div class="dataset-container">
+                                <table>
+                                    <thead>
+                                        <tr><th>ID</th><th>Name</th><th>Spend</th><th>Date</th><th>Status</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td class="cell-messy">C-101 </td><td class="cell-messy">  Alice Wong  </td><td class="cell-messy">"1,240"</td><td class="cell-messy">01/15/2024</td><td class="cell-messy">Active</td></tr>
+                                        <tr><td class="cell-messy">C-102</td><td class="cell-messy">Bob  Lee</td><td class="cell-messy">"980"</td><td class="cell-messy">2024-02-03</td><td class="cell-messy">Active</td></tr>
+                                        <tr><td class="cell-messy">C-103 </td><td class="cell-messy">  Carol  Diaz </td><td class="cell-messy">"1,455"</td><td class="cell-messy">03/22/24</td><td class="cell-messy">Inactive</td></tr>
+                                        <tr><td class="cell-messy">C-104</td><td class="cell-messy">Dan  O’Brien</td><td class="cell-messy">"725"</td><td class="cell-messy">2024-04-10</td><td class="cell-messy">—</td></tr>
+                                        <tr><td class="cell-messy">C-105</td><td class="cell-messy">Eve   Chen</td><td class="cell-messy">"1,890"</td><td class="cell-messy">05/08/2024</td><td class="cell-messy">Active</td></tr>
+                                        <tr><td class="cell-messy">C-106</td><td class="cell-messy">  Frank  Wu  </td><td class="cell-messy">"1,100"</td><td class="cell-messy">6/30/24</td><td class="cell-messy">Active</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="ba-col after">
+                            <h4>✅ After (cleaned)</h4>
+                            <div class="dataset-container">
+                                <table>
+                                    <thead>
+                                        <tr><th>ID</th><th>Name</th><th>Spend</th><th>Date</th><th>Status</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td class="cell-clean">C-101</td><td class="cell-clean">Alice Wong</td><td class="cell-clean">1240</td><td class="cell-clean">2024-01-15</td><td class="cell-clean">Active</td></tr>
+                                        <tr><td class="cell-clean">C-102</td><td class="cell-clean">Bob Lee</td><td class="cell-clean">980</td><td class="cell-clean">2024-02-03</td><td class="cell-clean">Active</td></tr>
+                                        <tr><td class="cell-clean">C-103</td><td class="cell-clean">Carol Diaz</td><td class="cell-clean">1455</td><td class="cell-clean">2024-03-22</td><td class="cell-clean">Inactive</td></tr>
+                                        <tr><td class="cell-clean">C-104</td><td class="cell-clean">Dan O’Brien</td><td class="cell-clean">725</td><td class="cell-clean">2024-04-10</td><td class="cell-clean">Unknown</td></tr>
+                                        <tr><td class="cell-clean">C-105</td><td class="cell-clean">Eve Chen</td><td class="cell-clean">1890</td><td class="cell-clean">2024-05-08</td><td class="cell-clean">Active</td></tr>
+                                        <tr><td class="cell-clean">C-106</td><td class="cell-clean">Frank Wu</td><td class="cell-clean">1100</td><td class="cell-clean">2024-06-30</td><td class="cell-clean">Active</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="expected-box">
+                        <span class="exp-label">✅ Expected outcome — analysis-ready dataset</span>
+                        <ul>
+                            <li><strong>Text:</strong> No leading/trailing spaces, no hidden characters in names.</li>
+                            <li><strong>Numbers:</strong> Spend values are true numerics (not strings with commas).</li>
+                            <li><strong>Dates:</strong> All dates stored as real date values with a consistent format.</li>
+                            <li><strong>Missing values:</strong> Blank Status cells flagged as “Unknown”.</li>
+                            <li><strong>Result:</strong> A clean table ready for pivoting, lookups, and charts.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="footnote">
+                    ⚡ <strong>Narissa's Data Analytics Course</strong> · Module 3 of 15 · Exercise — lookups, pivot tables, and data cleaning.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ============================================================
+            // TAB SWITCHING
+            // ============================================================
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetId = this.dataset.target;
+
+                    tabButtons.forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-selected', 'false');
+                    });
+                    tabPanels.forEach(p => p.classList.remove('active'));
+
+                    this.classList.add('active');
+                    this.setAttribute('aria-selected', 'true');
+                    document.getElementById(targetId).classList.add('active');
+
+                    const modulePips = document.querySelectorAll('.module-pip');
+                    modulePips.forEach(p => p.classList.remove('active'));
+                    if (targetId === 'panel-module1') {
+                        document.querySelector('.module-pip.available:nth-child(2)')?.classList.add('active');
+                    } else if (targetId === 'panel-module2') {
+                        document.querySelector('.module-pip.available:nth-child(3)')?.classList.add('active');
+                    } else if (targetId === 'panel-module3') {
+                        document.querySelector('.module-pip.available:nth-child(4)')?.classList.add('active');
+                    }
+                });
+            });
+
+            // ============================================================
+            // MODULE 1 · PART 1: CLASSIFY THE QUESTIONS
+            // ============================================================
+            const exCards = document.querySelectorAll('#panel-module1 .ex-card');
+
+            exCards.forEach(card => {
+                const chips = card.querySelectorAll('.method-chip');
+                const revealBtn = card.querySelector('.reveal-btn');
+                const modelBox = card.querySelector('.model-answer-box');
+                const answer = card.querySelector('.sample-methods').dataset.answer;
+
+                chips.forEach(chip => {
+                    chip.addEventListener('click', function() {
+                        chips.forEach(c => c.classList.remove('selected'));
+                        this.classList.add('selected');
+                    });
+                });
+
+                if (revealBtn) {
+                    revealBtn.addEventListener('click', function() {
+                        const isHidden = !modelBox.classList.contains('show');
+                        chips.forEach(c => {
+                            c.classList.remove('revealed-correct');
+                            if (c.dataset.value === answer) {
+                                c.classList.add('revealed-correct');
+                            }
+                        });
+                        modelBox.classList.toggle('show');
+                        revealBtn.textContent = isHidden ? '🙈 Hide model answer' : '👁 Reveal model answer';
+                    });
+                }
+            });
+
+            // Reset Module 1
+            const resetModule1Btn = document.getElementById('resetModule1Btn');
+            resetModule1Btn.addEventListener('click', function() {
+                document.querySelectorAll('#panel-module1 .method-chip').forEach(c => {
+                    c.classList.remove('selected', 'revealed-correct');
+                });
+                document.querySelectorAll('#panel-module1 .model-answer-box').forEach(m => {
+                    m.classList.remove('show');
+                });
+                document.querySelectorAll('#panel-module1 .ex-card .reveal-btn').forEach(b => {
+                    b.textContent = '👁 Reveal model answer';
+                });
+            });
+
+            // ============================================================
+            // MODULE 2 · PART 1: CLASSIFICATION
+            // ============================================================
+            const CORRECT = {
+                structure: 'semi-structured',
+                dataType: 'qualitative',
+                temporal: 'cross-sectional'
+            };
+
+            const submitBtn = document.getElementById('submitBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const clearFeedbackBtn = document.getElementById('clearFeedbackBtn');
+            const feedbackDiv = document.getElementById('feedback');
+            const feedbackText = document.getElementById('feedbackText');
+
+            const optionCards = document.querySelectorAll('#panel-module2 .option-card');
+            const structureRadios = document.querySelectorAll('#panel-module2 input[name="structure"]');
+            const dataTypeRadios = document.querySelectorAll('#panel-module2 input[name="dataType"]');
+            const temporalRadios = document.querySelectorAll('#panel-module2 input[name="temporal"]');
+
+            function getSelectedValue(radios) {
+                for (let radio of radios) {
+                    if (radio.checked) return radio.value;
+                }
+                return null;
+            }
+
+            function resetModule2Selections() {
+                structureRadios.forEach(r => r.checked = false);
+                dataTypeRadios.forEach(r => r.checked = false);
+                temporalRadios.forEach(r => r.checked = false);
+                optionCards.forEach(card => card.classList.remove('selected', 'revealed-correct'));
+                feedbackDiv.classList.remove('show', 'error');
+                feedbackDiv.style.display = 'none';
+            }
+
+            function clearModule2Feedback() {
+                feedbackDiv.classList.remove('show', 'error');
+                feedbackDiv.style.display = 'none';
+            }
+
+            function showModule2Feedback(message, isError = false) {
+                feedbackText.innerHTML = message;
+                feedbackDiv.classList.add('show');
+                if (isError) {
+                    feedbackDiv.classList.add('error');
+                    feedbackDiv.querySelector('i').textContent = '❌';
+                } else {
+                    feedbackDiv.classList.remove('error');
+                    feedbackDiv.querySelector('i').textContent = '✅';
+                }
+                feedbackDiv.style.display = 'flex';
+            }
+
+            function updateModule2CardSelection() {
+                optionCards.forEach(card => {
+                    const radio = card.querySelector('input[type="radio"]');
+                    if (radio && radio.checked) {
+                        card.classList.add('selected');
+                    } else {
+                        card.classList.remove('selected');
+                    }
+                });
+            }
+
+            function checkModule2Answers() {
+                const selectedStructure = getSelectedValue(structureRadios);
+                const selectedDataType = getSelectedValue(dataTypeRadios);
+                const selectedTemporal = getSelectedValue(temporalRadios);
+
+                if (!selectedStructure || !selectedDataType || !selectedTemporal) {
+                    showModule2Feedback('Please answer all three questions before checking.', true);
+                    return;
+                }
+
+                optionCards.forEach(c => c.classList.remove('revealed-correct'));
+
+                const wrong = [];
+                const checkMap = [
+                    { key: 'structure', correct: CORRECT.structure, selected: selectedStructure, label: '1 · Structure', explanation: 'the dataset has a tabular layout plus a free‑text <em>comments</em> column — making it semi-structured' },
+                    { key: 'dataType', correct: CORRECT.dataType, selected: selectedDataType, label: '2 · Data type', explanation: 'the dataset contains free‑text comments and categorical/ordinal ratings rather than purely numerical measurements — making it qualitative' },
+                    { key: 'temporal', correct: CORRECT.temporal, selected: selectedTemporal, label: '3 · Temporal', explanation: 'each respondent appears only once across different months, so it’s not tracking the same subjects over time — making it cross-sectional' }
+                ];
+
+                checkMap.forEach(item => {
+                    const correctCard = document.querySelector(`#panel-module2 .option-card[data-q="${item.key}"][data-value="${item.correct}"]`);
+                    correctCard?.classList.add('revealed-correct');
+                    if (item.selected !== item.correct) {
+                        wrong.push(`<strong>${item.label}:</strong> you chose “${item.selected}”, but the correct answer is “${item.correct}” — ${item.explanation}.`);
+                    }
+                });
+
+                if (wrong.length === 0) {
+                    showModule2Feedback('✅ All answers are correct! The dataset is <strong>semi‑structured</strong> (tabular + free text), <strong>qualitative</strong> (comments/ratings/brackets), and <strong>cross‑sectional</strong> (different respondents, no repeated measures).', false);
+                } else {
+                    showModule2Feedback('Here’s how your thinking compares to the correct answer:<br>' + wrong.join('<br>'), false);
+                }
+            }
+
+            optionCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'INPUT') return;
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) {
+                        radio.checked = true;
+                        updateModule2CardSelection();
+                        if (feedbackDiv.classList.contains('show')) clearModule2Feedback();
+                    }
+                });
+                const radio = card.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.addEventListener('change', function() {
+                        updateModule2CardSelection();
+                        if (feedbackDiv.classList.contains('show')) clearModule2Feedback();
+                    });
+                }
+            });
+
+            resetBtn.addEventListener('click', resetModule2Selections);
+            clearFeedbackBtn.addEventListener('click', clearModule2Feedback);
+            submitBtn.addEventListener('click', checkModule2Answers);
+            updateModule2CardSelection();
+
+            // ============================================================
+            // MODULE 2 · PART 2: SOURCE SELECTION
+            // ============================================================
+            const SOURCE_INFO = {
+                'transaction-logs': {
+                    title: 'Transaction logs', type: 'Internal', reliable: true, icon: '✅',
+                    reason: 'Objective, timestamped, and complete record of every purchase and refund. Directly shows refund frequency, products, and amounts — the single best source for measuring the “what” and “when” of refunds.',
+                    risk: 'May lack context on <em>why</em> a customer refunded. Return reason codes can be vague or inconsistently entered by staff.'
+                },
+                'crm': {
+                    title: 'CRM system', type: 'Internal', reliable: true, icon: '✅',
+                    reason: 'Ties refunds to customer profiles, loyalty tier, and prior behavior. Helps identify whether high-value or repeat customers are driving refunds, and whether issues are concentrated in a segment.',
+                    risk: 'Only as good as the data entry. Duplicate records, stale contact info, or incomplete notes can mislead segment-level analysis.'
+                },
+                'support-tickets': {
+                    title: 'Support tickets', type: 'Internal', reliable: false, icon: '⚠️',
+                    reason: 'Rich qualitative detail on <em>why</em> customers are unhappy — product defects, shipping delays, misleading descriptions. Excellent for root-cause hypotheses.',
+                    risk: 'Subjective and inconsistent. Not all refunds generate a ticket, and agent notes vary in quality. Volume may reflect support capacity, not true problem rate.'
+                },
+                'reviews': {
+                    title: 'Social media reviews', type: 'External', reliable: false, icon: '⚠️',
+                    reason: 'Public voice of the customer. Can reveal product-level issues (sizing, quality, durability) that internal codes miss, and compare sentiment across SKUs.',
+                    risk: 'Self-selection bias — unhappy customers are more likely to review. Fake or incentivized reviews, platform-specific skew, and no link to actual refund events.'
+                },
+                'third-party-reviews': {
+                    title: 'Third-party review sites', type: 'External', reliable: false, icon: '⚠️',
+                    reason: 'Aggregated themes from platforms like Trustpilot or Yelp. Useful for spotting recurring complaint patterns across a broader customer base.',
+                    risk: 'Platform-specific bias and review gating. May over-represent extreme experiences. Themes are qualitative and hard to quantify without careful text analysis.'
+                },
+                'social-sentiment': {
+                    title: 'Social media sentiment', type: 'External', reliable: false, icon: '🔶',
+                    reason: 'Early warning signal for viral complaints, PR issues, or sudden sentiment shifts. Can surface emerging problems before they hit refund logs.',
+                    risk: 'Very noisy: sarcasm, bots, unrelated mentions, and small sample sizes. Hard to verify identity or purchase. Sentiment models often misclassify. Not representative.'
+                }
+            };
+
+            const sourceCards = document.querySelectorAll('#panel-module2 .source-card');
+            const reasoningContent = document.getElementById('reasoningContent');
+            const checkSourcesBtn = document.getElementById('checkSourcesBtn');
+            const resetSourcesBtn = document.getElementById('resetSourcesBtn');
+            const clearSourceFeedbackBtn = document.getElementById('clearSourceFeedbackBtn');
+            const sourceFeedbackDiv = document.getElementById('sourceFeedback');
+            const sourceFeedbackText = document.getElementById('sourceFeedbackText');
+
+            const RECOMMENDED = ['transaction-logs', 'crm', 'support-tickets', 'reviews', 'third-party-reviews'];
+
+            function getSelectedSources() {
+                const selected = [];
+                sourceCards.forEach(card => {
+                    const cb = card.querySelector('input[type="checkbox"]');
+                    if (cb && cb.checked) selected.push(card.dataset.source);
+                });
+                return selected;
+            }
+
+            function updateSourceCardSelection() {
+                sourceCards.forEach(card => {
+                    const cb = card.querySelector('input[type="checkbox"]');
+                    if (cb && cb.checked) card.classList.add('selected');
+                    else card.classList.remove('selected');
+                });
+            }
+
+            function updateReasoningPanel() {
+                const selected = getSelectedSources();
+                if (selected.length === 0) {
+                    reasoningContent.innerHTML = `
+                        <div class="reasoning-item">
+                            <span class="r-icon">💡</span>
+                            <span class="r-text">Select one or more sources to see why each is <span class="pro">reliable</span> or <span class="con">risky</span>.</span>
+                        </div>`;
+                    return;
+                }
+                let html = '';
+                selected.forEach(srcKey => {
+                    const info = SOURCE_INFO[srcKey];
+                    if (!info) return;
+                    const reliabilityClass = info.reliable ? 'pro' : 'con';
+                    const reliabilityLabel = info.reliable ? 'Reliable' : 'Risky / mixed';
+                    html += `
+                        <div class="reasoning-item">
+                            <span class="r-icon">${info.icon}</span>
+                            <span class="r-text">
+                                <strong>${info.title}</strong> <em>(${info.type})</em> — 
+                                <span class="${reliabilityClass}">${reliabilityLabel}</span>.
+                                <br><span style="color:#1e6b34;"><strong>Why it helps:</strong></span> ${info.reason}
+                                <br><span style="color:#a83232;"><strong>Risks / caveats:</strong></span> ${info.risk}
+                            </span>
+                        </div>`;
+                });
+                reasoningContent.innerHTML = html;
+            }
+
+            function clearSourceFeedback() {
+                sourceFeedbackDiv.classList.remove('show', 'error', 'warning');
+                sourceFeedbackDiv.style.display = 'none';
+            }
+
+            function showSourceFeedback(message, type = 'success') {
+                sourceFeedbackText.innerHTML = message;
+                sourceFeedbackDiv.classList.add('show');
+                sourceFeedbackDiv.classList.remove('error', 'warning');
+                let icon = '✅';
+                if (type === 'error') { sourceFeedbackDiv.classList.add('error'); icon = '❌'; }
+                else if (type === 'warning') { sourceFeedbackDiv.classList.add('warning'); icon = '⚠️'; }
+                sourceFeedbackDiv.querySelector('i').textContent = icon;
+                sourceFeedbackDiv.style.display = 'flex';
+            }
+
+            function checkSourceChoices() {
+                const selected = getSelectedSources();
+                if (selected.length === 0) {
+                    showSourceFeedback('Please select at least one source before checking.', 'error');
+                    return;
+                }
+                const missing = RECOMMENDED.filter(s => !selected.includes(s));
+                const extra = selected.filter(s => !RECOMMENDED.includes(s));
+
+                let msg = '';
+                let type = 'success';
+
+                if (missing.length === 0 && extra.length === 0) {
+                    msg = '✅ Excellent! You selected all the recommended sources for this refund investigation. ' +
+                          'Transaction logs and CRM give you the quantitative backbone, support tickets and reviews provide the qualitative “why”, ' +
+                          'and third‑party review themes help validate patterns.';
+                } else {
+                    type = 'warning';
+                    msg = '<strong>Here’s how your selection compares:</strong><br>';
+                    if (missing.length > 0) {
+                        const missingNames = missing.map(s => SOURCE_INFO[s].title).join(', ');
+                        msg += `<br>🔸 <strong>Sources you may want to add:</strong> ${missingNames}. These would strengthen the analysis.`;
+                    }
+                    if (extra.length > 0) {
+                        const extraNames = extra.map(s => SOURCE_INFO[s].title).join(', ');
+                        msg += `<br>🔹 <strong>Sources to use with caution:</strong> ${extraNames}. `;
+                        if (extra.includes('social-sentiment')) {
+                            msg += 'Social media sentiment is noisy and unverified — treat it as a supplementary signal, not a primary source. ';
+                        }
+                    }
+                }
+                showSourceFeedback(msg, type);
+            }
+
+            function resetSourceSelections() {
+                sourceCards.forEach(card => {
+                    const cb = card.querySelector('input[type="checkbox"]');
+                    if (cb) cb.checked = false;
+                });
+                updateSourceCardSelection();
+                updateReasoningPanel();
+                clearSourceFeedback();
+            }
+
+            sourceCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'INPUT') return;
+                    const cb = this.querySelector('input[type="checkbox"]');
+                    if (cb) {
+                        cb.checked = !cb.checked;
+                        updateSourceCardSelection();
+                        updateReasoningPanel();
+                        if (sourceFeedbackDiv.classList.contains('show')) clearSourceFeedback();
+                    }
+                });
+                const cb = card.querySelector('input[type="checkbox"]');
+                if (cb) {
+                    cb.addEventListener('change', function() {
+                        updateSourceCardSelection();
+                        updateReasoningPanel();
+                        if (sourceFeedbackDiv.classList.contains('show')) clearSourceFeedback();
+                    });
+                }
+            });
+
+            checkSourcesBtn.addEventListener('click', checkSourceChoices);
+            resetSourcesBtn.addEventListener('click', resetSourceSelections);
+            clearSourceFeedbackBtn.addEventListener('click', clearSourceFeedback);
+
+            updateSourceCardSelection();
+            updateReasoningPanel();
+            sourceFeedbackDiv.style.display = 'none';
+            feedbackDiv.style.display = 'none';
+        })();
+    </script>
+</body>
+</html>
