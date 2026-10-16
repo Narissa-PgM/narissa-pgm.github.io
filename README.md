@@ -11,14 +11,4 @@ This repository publishes Narissara Khomkhai's program management and data strat
 - `archive/` — retained experiments and legacy material.
 - `assets_FASCFO/` and `docs/` — existing shared assets retained at their original URLs for compatibility.
 
-## URL compatibility
 
-Existing project URLs remain as small redirect pages at their original paths. Do not remove those redirect files unless external links, bookmarks, and search results using the prior address have been deliberately retired.
-
-GitHub does not redirect the previous Pages site hostname after a username change. Update links in resumes, LinkedIn, email signatures, and other sites to use `https://narissa-pgm.github.io/`.
-
-When adding a new page, place it in the appropriate directory and use root-relative links, such as `/projects/advancement/example.html`. Root-relative links continue to work regardless of the folder depth of the page containing the link.
-
-## Publishing
-
-GitHub Pages serves this repository directly. Review changes locally, then commit and push them to the publishing branch.
