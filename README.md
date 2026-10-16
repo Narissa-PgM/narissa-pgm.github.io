@@ -1,7 +1,5 @@
 # Narissara Khomkhai | Program Management Portfolio
 
-This repository publishes Narissara Khomkhai's program management and data strategy portfolio through GitHub Pages at `narissa-pgm.github.io`.
-
 ## Structure
 
 - `index.html` — primary public landing page.
